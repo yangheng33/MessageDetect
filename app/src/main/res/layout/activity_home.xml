@@ -11,23 +11,55 @@
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
-        android:layout_height="32dp"
+        android:layout_height="48dp"
         android:gravity="center"
         android:text="@string/hello_world" />
 
 
     <Button
-        android:text="测试RxAndroid"
-        android:layout_toRightOf="@+id/title"
+        android:id="@+id/rxAndroid"
         android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:textSize="10sp"
-        android:id="@+id/rxAndroid"/>
+        android:layout_height="48dp"
+        android:layout_toRightOf="@+id/title"
+        android:text="测试RxAndroid"
+        android:textSize="12sp" />
 
     <EditText
-        android:layout_toRightOf="@+id/rxAndroid"
-        android:textSize="10sp"
         android:id="@+id/input"
-        android:layout_width="100dp"
-        android:layout_height="32dp" />
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_toRightOf="@+id/rxAndroid"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:id="@+id/serviceLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rxAndroid">
+
+        <Button
+            android:id="@+id/serviceStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="启动" />
+
+        <Button
+            android:id="@+id/serviceStop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="停止" />
+
+        <Button
+            android:id="@+id/serviceQuery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="查询" />
+
+    </LinearLayout>
+
+    <EditText
+        android:layout_below="@id/serviceLayout"
+        android:id="@+id/serviceStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </RelativeLayout>
