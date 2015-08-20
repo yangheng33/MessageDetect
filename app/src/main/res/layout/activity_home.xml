@@ -11,7 +11,23 @@
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="32dp"
+        android:gravity="center"
         android:text="@string/hello_world" />
 
+
+    <Button
+        android:text="测试RxAndroid"
+        android:layout_toRightOf="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:textSize="10sp"
+        android:id="@+id/rxAndroid"/>
+
+    <EditText
+        android:layout_toRightOf="@+id/rxAndroid"
+        android:textSize="10sp"
+        android:id="@+id/input"
+        android:layout_width="100dp"
+        android:layout_height="32dp" />
 </RelativeLayout>
