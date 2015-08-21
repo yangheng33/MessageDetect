@@ -1,9 +1,13 @@
 package com.detect.amar.messagedetect;
 
+import java.util.Map;
+
 import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.GET;
+import retrofit.http.Headers;
 import retrofit.http.POST;
+import retrofit.http.QueryMap;
 import rx.Observable;
 
 /**
@@ -11,9 +15,14 @@ import rx.Observable;
  */
 public interface SendMessageService {
 
-    @POST("/test/add.php")
+    //@POST("/test/add.php")
+    @POST("/test/add.jsp")
     Observable<Response> sendMessage(@Body Message message);
 
-    @POST("/test/add.php")
-    void sendMessage(@Body Message message, Callback<Response> callback);
+    //@POST("/test/add.php")
+    @POST("/test/add.jsp")
+    void sendMessage(@QueryMap Map<String,String> message, Callback<Response> callback);
+
+    @GET("/test/ask.jsp")
+    void getHtml(Callback<String> html);
 }

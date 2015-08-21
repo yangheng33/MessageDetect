@@ -3,6 +3,11 @@ package com.detect.amar.messagedetect;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by SAM on 2015/8/21.
  */
@@ -14,11 +19,20 @@ public class Message implements Parcelable {
     private boolean isTrans;//转发成功
     private String toNumber;
 
-    public Message(String fromNumber,String toNumber, String info, String date) {
+    public Message(String fromNumber, String toNumber, String info, String date) {
         this.fromNumber = fromNumber;
         this.toNumber = toNumber;
         this.info = info;
         this.date = date;
+    }
+
+    public Map<String, String> toMap() {
+        Map<String, String> map = new HashMap<>();
+        map.put("from", fromNumber);
+        map.put("to", toNumber);
+        map.put("date", date);
+        map.put("info", info);
+        return map;
     }
 
     public String getToNumber() {

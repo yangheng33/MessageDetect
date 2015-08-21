@@ -61,7 +61,8 @@ public class HomeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         titleTxt.setText("动态设置参数啦");
-        sendPathEdit.setText("http://192.168.1.176");
+        //sendPathEdit.setText("http://192.168.1.176");
+        sendPathEdit.setText("http://192.168.254.102:8080/simple");
     }
 
     @Override
@@ -88,14 +89,13 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.netBtn)
-    void clickNetBtn() {
+    //@OnClick(R.id.netBtn)
+    void clickNetBtn_sendMap_returnGson() {
         Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).registerTypeAdapter(Date.class, new DateTypeAdapter()).create();
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(sendPathEdit.getText().toString()).setConverter(new GsonConverter(gson)).build();
-        //RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(sendPathEdit.getText().toString()).build();
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(sendPathEdit.getText().toString()).build();
 
         SendMessageService service = restAdapter.create(SendMessageService.class);
-        service.sendMessage(new Message("10086", "1581078", "hello amar", "2012-12-12 20:20:11"), new Callback<Response>() {
+        service.sendMessage(new Message("10086", "1581078", "hello amar", "2012-12-12 20:20:11").toMap(), new Callback<Response>() {
             @Override
             public void success(Response response, retrofit.client.Response response2) {
                 returnInfoEdit.setText(response.toString() + "#####" + response2.toString());
@@ -107,28 +107,22 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
-    //@OnClick(R.id.netBtn)
-    void clickNetBtn_old() {
-
+    @OnClick(R.id.netBtn)
+    void clickNetBtn() {
         Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).registerTypeAdapter(Date.class, new DateTypeAdapter()).create();
-        //RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(sendPathEdit.getText().toString()).setConverter(new GsonConverter(gson)).build();
-        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(sendPathEdit.getText().toString()).build();
+
+        RestAdapter restAdapter = new RestAdapter.Builder().setConverter(new StringConverter(gson)).setEndpoint(sendPathEdit.getText().toString()).build();
 
         SendMessageService service = restAdapter.create(SendMessageService.class);
-        service.sendMessage(new Message("10086", "1581078", "hello amar", "2012-12-12 20:20:11")).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Subscriber<Response>() {
+        service.getHtml(new Callback<String>() {
             @Override
-            public void onCompleted() {
-
+            public void success(String s, retrofit.client.Response response) {
+                returnInfoEdit.setText("成功：" + s);
             }
 
             @Override
-            public void onError(Throwable e) {
-                returnInfoEdit.setText("" + e.getMessage());
-            }
-
-            @Override
-            public void onNext(Response s) {
-                returnInfoEdit.setText(s.toString());
+            public void failure(RetrofitError error) {
+                returnInfoEdit.setText("失败:" + error.getMessage());
             }
         });
     }
