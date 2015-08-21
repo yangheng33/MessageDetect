@@ -1,7 +1,9 @@
 package com.detect.amar.messagedetect;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -29,6 +31,14 @@ public class MessageDetectMyService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand() executed");
 
+        Message message = intent.getParcelableExtra("message");
+        if (message != null) {
+            SharedPreferences mySharedPreferences=this.getSharedPreferences("MessageDetect", Activity.MODE_APPEND);
+            SharedPreferences.Editor editor=mySharedPreferences.edit();
+            editor.putString("message",message.toString());
+            editor.apply();
+        }
+
         testRxAndroid();
 
         Log.d(TAG, "onStartCommand() will leave");
@@ -41,7 +51,7 @@ public class MessageDetectMyService extends Service {
         if (rxTestSubscriber != null && !rxTestSubscriber.isUnsubscribed()) {
             rxTestSubscriber.unsubscribe();
             rxTestSubscriber = null;
-            Log.d(TAG,":::即将停止");
+            Log.d(TAG, ":::即将停止");
         } else {
             rxTestSubscriber = new Subscriber<Long>() {
                 @Override
@@ -56,12 +66,13 @@ public class MessageDetectMyService extends Service {
 
                 @Override
                 public void onNext(Long aLong) {
-                    Log.d(TAG,":::"+aLong);
+                    Log.d(TAG, ":::" + aLong);
                 }
             };
             Observable.interval(10, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.newThread()).subscribe(rxTestSubscriber);
         }
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -70,7 +81,7 @@ public class MessageDetectMyService extends Service {
         if (rxTestSubscriber != null && !rxTestSubscriber.isUnsubscribed()) {
             rxTestSubscriber.unsubscribe();
             rxTestSubscriber = null;
-            Log.d(TAG,":::即将停止");
+            Log.d(TAG, ":::即将停止");
         }
     }
 
