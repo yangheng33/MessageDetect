@@ -9,6 +9,9 @@ import android.util.Log;
 
 import java.util.concurrent.TimeUnit;
 
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -31,58 +34,46 @@ public class MessageDetectMyService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand() executed");
 
-        Message message = intent.getParcelableExtra("message");
+        final Message message = intent.getParcelableExtra("message");
         if (message != null) {
-            SharedPreferences mySharedPreferences=this.getSharedPreferences("MessageDetect", Activity.MODE_APPEND);
-            SharedPreferences.Editor editor=mySharedPreferences.edit();
-            editor.putString("message",message.toString());
-            editor.apply();
-        }
 
-        testRxAndroid();
+            String url = "http://192.168.254.102:8080/simple/";
+            RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(url).build();
+            SendMessageService service = restAdapter.create(SendMessageService.class);
+            service.sendMessage(message.toMap(), new Callback<Response>() {
+                @Override
+                public void success(Response response, retrofit.client.Response response2) {
+                    SharedPreferences mySharedPreferences = MessageDetectMyService.this.getSharedPreferences("MessageDetect", Activity.MODE_APPEND);
+                    SharedPreferences.Editor editor = mySharedPreferences.edit();
+                    message.setIsTrans(true);
+
+                    editor.putString("message", message.toString());
+                    editor.apply();
+                    Log.d(TAG, "发送成功:"+message.toString());
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    SharedPreferences mySharedPreferences = MessageDetectMyService.this.getSharedPreferences("MessageDetect", Activity.MODE_APPEND);
+                    SharedPreferences.Editor editor = mySharedPreferences.edit();
+                    message.setIsTrans(false);
+                    editor.putString("message", message.toString());
+                    editor.apply();
+                    Log.d(TAG, "发送失败:"+message.toString()+"\n:原因,\n"+error.getMessage());
+                }
+            });
+
+
+        }
 
         Log.d(TAG, "onStartCommand() will leave");
         return super.onStartCommand(intent, flags, startId);
-    }
-
-    Subscriber<Long> rxTestSubscriber = null;
-
-    void testRxAndroid() {
-        if (rxTestSubscriber != null && !rxTestSubscriber.isUnsubscribed()) {
-            rxTestSubscriber.unsubscribe();
-            rxTestSubscriber = null;
-            Log.d(TAG, ":::即将停止");
-        } else {
-            rxTestSubscriber = new Subscriber<Long>() {
-                @Override
-                public void onCompleted() {
-
-                }
-
-                @Override
-                public void onError(Throwable e) {
-
-                }
-
-                @Override
-                public void onNext(Long aLong) {
-                    Log.d(TAG, ":::" + aLong);
-                }
-            };
-            Observable.interval(10, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.newThread()).subscribe(rxTestSubscriber);
-        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy() executed");
-
-        if (rxTestSubscriber != null && !rxTestSubscriber.isUnsubscribed()) {
-            rxTestSubscriber.unsubscribe();
-            rxTestSubscriber = null;
-            Log.d(TAG, ":::即将停止");
-        }
     }
 
     @Override

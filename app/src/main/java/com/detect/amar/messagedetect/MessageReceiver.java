@@ -24,24 +24,18 @@ public class MessageReceiver extends BroadcastReceiver {
         for (Object pdu : pdus) {
             SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) pdu);
             String sender = smsMessage.getDisplayOriginatingAddress();
-            String receiver = smsMessage.getServiceCenterAddress()+"<==>"+smsMessage.getOriginatingAddress();
+            String receiver = smsMessage.getServiceCenterAddress();
             String content = smsMessage.getMessageBody();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String time = simpleDateFormat.format(new Date(smsMessage.getTimestampMillis()));
 
-            Message message = new Message(sender,receiver,content,time);
+            Message message = new Message(sender, receiver, content, time);
             Log.d(TAG, message.toString());
             Toast.makeText(context, message.toString(), Toast.LENGTH_SHORT).show();
-            //如果短信来自5556,不再往下传递
-            if (sender.equals("7777")) {
-                Intent startIntent = new Intent(context, MessageDetectMyService.class);
-                startIntent.putExtra("message",message);
-                context.startService(startIntent);
-                abortBroadcast();
-            } else {
-
-            }
-
+            Intent startIntent = new Intent(context, MessageDetectMyService.class);
+            startIntent.putExtra("message", message);
+            context.startService(startIntent);
+            //abortBroadcast();
         }
     }
 }

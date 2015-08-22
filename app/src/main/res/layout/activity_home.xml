@@ -32,11 +32,11 @@
         android:textSize="12sp" />
 
     <LinearLayout
-        android:gravity="center_horizontal"
         android:id="@+id/serviceLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rxAndroid">
+        android:layout_below="@+id/rxAndroid"
+        android:gravity="center_horizontal">
 
         <Button
             android:id="@+id/serviceStart"
@@ -63,10 +63,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/serviceLayout">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="状态：" />
+
         <EditText
             android:id="@+id/serviceStatus"
             android:layout_width="match_parent"
@@ -91,22 +93,25 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_below="@+id/sendLayout"
         android:id="@+id/sendBtnLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/sendLayout"
         android:gravity="center_horizontal">
+
         <Button
             android:id="@+id/netBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="发送"/>
+            android:text="发送" />
+
         <Button
             android:id="@+id/clearBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="清除"/>
+            android:text="清除" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/receLayout"
         android:layout_width="match_parent"
@@ -120,6 +125,37 @@
 
         <EditText
             android:id="@+id/returnInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/receLayout"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/checkLog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="查看日志" />
+
+            <Button
+                android:id="@+id/clearLog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="清除日志"/>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/logEdit"
+            android:lines="5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

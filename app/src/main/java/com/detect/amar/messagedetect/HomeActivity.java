@@ -1,5 +1,6 @@
 package com.detect.amar.messagedetect;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.nfc.Tag;
@@ -53,6 +54,9 @@ public class HomeActivity extends AppCompatActivity {
     @Bind(R.id.netBtn)
     Button netBtn;
 
+    @Bind(R.id.logEdit)
+    EditText logEdit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +73,19 @@ public class HomeActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+    }
+
+    @OnClick(R.id.checkLog)
+    void checkLog()
+    {
+        String logInfo = this.getSharedPreferences("MessageDetect", Activity.MODE_APPEND).getString("message","没有数据");
+        logEdit.setText(logInfo);
+    }
+
+    @OnClick(R.id.clearLog)
+    void clearLog()
+    {
+    logEdit.setText("");
     }
 
     @OnClick(R.id.serviceStart)
@@ -89,11 +106,9 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    //@OnClick(R.id.netBtn)
+    @OnClick(R.id.netBtn)
     void clickNetBtn_sendMap_returnGson() {
-        Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).registerTypeAdapter(Date.class, new DateTypeAdapter()).create();
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(sendPathEdit.getText().toString()).build();
-
         SendMessageService service = restAdapter.create(SendMessageService.class);
         service.sendMessage(new Message("10086", "1581078", "hello amar", "2012-12-12 20:20:11").toMap(), new Callback<Response>() {
             @Override
@@ -107,8 +122,8 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
-    @OnClick(R.id.netBtn)
-    void clickNetBtn() {
+    //@OnClick(R.id.netBtn)
+    void clickNetBtn_html() {
         Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).registerTypeAdapter(Date.class, new DateTypeAdapter()).create();
 
         RestAdapter restAdapter = new RestAdapter.Builder().setConverter(new StringConverter(gson)).setEndpoint(sendPathEdit.getText().toString()).build();
