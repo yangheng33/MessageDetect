@@ -94,15 +94,15 @@ public class MessageDao extends SQLiteOpenHelper {
             Cursor cursor = getReadableDatabase().query(Table_Name, columns, null, null, null, null, orderBy, limit);
             cursor.moveToFirst();
             for (int i = 0; i < cursor.getCount(); i++) {
-                String id = cursor.getString(1);
-                String fromNumber = cursor.getString(2);
-                String toNumber = cursor.getString(3);
-                String info = cursor.getString(4);
-                boolean transstatus = !(null == cursor.getString(5) || "".equals(cursor.getString(5)) || "0".equals(cursor.getString(5)));
-                String origindate = dbIntegerToDateString(cursor.getString(6));
-                String receivedate = dbIntegerToDateString(cursor.getString(7));
-                String lastsenddate = dbIntegerToDateString(cursor.getString(8));
-                String transfail = cursor.getString(9);
+                String id = cursor.getString(0);
+                String fromNumber = cursor.getString(1);
+                String toNumber = cursor.getString(2);
+                String info = cursor.getString(3);
+                boolean transstatus = !(null == cursor.getString(4) || "".equals(cursor.getString(4)) || "0".equals(cursor.getString(4)));
+                String origindate = dbIntegerToDateString(cursor.getString(5));
+                String receivedate = dbIntegerToDateString(cursor.getString(6));
+                String lastsenddate = dbIntegerToDateString(cursor.getString(7));
+                String transfail = cursor.getString(8);
                 //public Message( long id,String fromNumber,String toNumber, String info, String origindate, boolean isTrans,  String lastsenddate, String transfail, String receivedate)
                 Message messageItem = new Message(id, fromNumber, toNumber, info,origindate,transstatus,lastsenddate,transfail,receivedate);
                 messageList.add(messageItem);
