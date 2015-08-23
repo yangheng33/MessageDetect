@@ -19,8 +19,8 @@ public interface SendMessageService {
     @POST("/test/add.jsp")
     Observable<Response> sendMessage(@Body Message message);
 
-    //@POST("/test/add.php")
-    @POST("/test/add.jsp")
+    @POST("/test/add.php")
+    //@POST("/test/add.jsp")
     void sendMessage(@QueryMap Map<String,String> message, Callback<Response> callback);
 
     @GET("/test/ask.jsp")

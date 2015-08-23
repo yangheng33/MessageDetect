@@ -37,7 +37,8 @@ public class MessageDetectMyService extends Service {
         final Message message = intent.getParcelableExtra("message");
         if (message != null) {
 
-            String url = "http://192.168.254.102:8080/simple/";
+            //String url = "http://192.168.254.102:8080/simple/";
+            String url = "http://192.168.1.176:80";
             RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(url).build();
             SendMessageService service = restAdapter.create(SendMessageService.class);
             service.sendMessage(message.toMap(), new Callback<Response>() {

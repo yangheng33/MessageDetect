@@ -76,16 +76,14 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.checkLog)
-    void checkLog()
-    {
-        String logInfo = this.getSharedPreferences("MessageDetect", Activity.MODE_APPEND).getString("message","没有数据");
+    void checkLog() {
+        String logInfo = this.getSharedPreferences("MessageDetect", Activity.MODE_APPEND).getString("message", "没有数据");
         logEdit.setText(logInfo);
     }
 
     @OnClick(R.id.clearLog)
-    void clearLog()
-    {
-    logEdit.setText("");
+    void clearLog() {
+        logEdit.setText("");
     }
 
     @OnClick(R.id.serviceStart)
@@ -110,7 +108,7 @@ public class HomeActivity extends AppCompatActivity {
     void clickNetBtn_sendMap_returnGson() {
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(sendPathEdit.getText().toString()).build();
         SendMessageService service = restAdapter.create(SendMessageService.class);
-        service.sendMessage(new Message("10086", "1581078", "hello amar", "2012-12-12 20:20:11").toMap(), new Callback<Response>() {
+        service.sendMessage(new Message("10086", "1581078", "hello amar", "2012-12-12 20:20:11", "2012-12-12 20:20:12").toMap(), new Callback<Response>() {
             @Override
             public void success(Response response, retrofit.client.Response response2) {
                 returnInfoEdit.setText(response.toString() + "#####" + response2.toString());
@@ -122,6 +120,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
     //@OnClick(R.id.netBtn)
     void clickNetBtn_html() {
         Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).registerTypeAdapter(Date.class, new DateTypeAdapter()).create();
