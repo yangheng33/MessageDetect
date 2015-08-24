@@ -1,4 +1,4 @@
-package com.detect.amar.messagedetect.common;
+package com.detect.amar.common;
 
 import java.text.DateFormat;
 import java.text.ParseException;

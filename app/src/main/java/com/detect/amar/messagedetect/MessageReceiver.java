@@ -1,6 +1,5 @@
 package com.detect.amar.messagedetect;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.content.BroadcastReceiver;
@@ -11,7 +10,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.detect.amar.messagedetect.common.DatetimeUtil;
+import com.detect.amar.common.DatetimeUtil;
 
 public class MessageReceiver extends BroadcastReceiver {
     String TAG = "home";

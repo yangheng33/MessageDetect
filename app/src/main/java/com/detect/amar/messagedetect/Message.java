@@ -3,7 +3,7 @@ package com.detect.amar.messagedetect;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.SerializedName;
+import com.detect.amar.common.Encryption;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +18,8 @@ public class Message implements Parcelable {
     private String origindate;//短信的原始时间
     private boolean isTrans;//转发成功
     private String toNumber;
+
+    private String sign;//签名字段，之前4个重要字段的md5值
 
     //数据库使用字段
     private String id;
@@ -45,12 +47,18 @@ public class Message implements Parcelable {
         this.receivedate = receivedate;
     }
 
+
+    public void calculateSign() {
+        sign = Encryption.parseStrToMd5U32(fromNumber + toNumber + info + origindate);
+    }
+
     public Map<String, String> toMap() {
         Map<String, String> map = new HashMap<>();
         map.put("from", fromNumber);
         map.put("to", toNumber);
         map.put("date", origindate);
         map.put("info", info);
+        map.put("sign", sign);
         return map;
     }
 
@@ -133,6 +141,14 @@ public class Message implements Parcelable {
         this.origindate = origindate;
     }
 
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
 
     @Override
     public int describeContents() {
@@ -146,6 +162,7 @@ public class Message implements Parcelable {
         dest.writeString(this.origindate);
         dest.writeByte(isTrans ? (byte) 1 : (byte) 0);
         dest.writeString(this.toNumber);
+        dest.writeString(this.sign);
         dest.writeString(this.id);
         dest.writeString(this.lastsenddate);
         dest.writeString(this.transfail);
@@ -158,6 +175,7 @@ public class Message implements Parcelable {
         this.origindate = in.readString();
         this.isTrans = in.readByte() != 0;
         this.toNumber = in.readString();
+        this.sign = in.readString();
         this.id = in.readString();
         this.lastsenddate = in.readString();
         this.transfail = in.readString();
@@ -182,7 +200,8 @@ public class Message implements Parcelable {
                 ", origindate='" + origindate + '\'' +
                 ", isTrans=" + isTrans +
                 ", toNumber='" + toNumber + '\'' +
-                ", id=" + id +
+                ", sign='" + sign + '\'' +
+                ", id='" + id + '\'' +
                 ", lastsenddate='" + lastsenddate + '\'' +
                 ", transfail='" + transfail + '\'' +
                 ", receivedate='" + receivedate + '\'' +

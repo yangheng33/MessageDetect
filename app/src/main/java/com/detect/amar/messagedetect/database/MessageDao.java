@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.detect.amar.messagedetect.Message;
-import com.detect.amar.messagedetect.common.DatetimeUtil;
+import com.detect.amar.common.DatetimeUtil;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;

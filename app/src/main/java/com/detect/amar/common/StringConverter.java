@@ -1,4 +1,4 @@
-package com.detect.amar.messagedetect;
+package com.detect.amar.common;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
