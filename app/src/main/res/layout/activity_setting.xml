@@ -10,6 +10,23 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.detect.amar.messagedetect.setting.SettingActivity">
+ <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="DevNo:" />
+
+        <EditText
+            android:id="@+id/setting_dev_no"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:editable="false"
+            />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,13 +52,33 @@
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:gravity="right"
+            android:text="轮询周期:" />
+
+        <EditText
+            android:id="@+id/setting_cycle_frequency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:text="" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
             android:text="SIM 1:" />
 
         <EditText
             android:id="@+id/setting_sim_1"
+            android:inputType="numberDecimal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,26 +92,21 @@
 
         <EditText
             android:id="@+id/setting_sim_2"
+            android:inputType="numberDecimal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="" />
     </LinearLayout>
 
     <LinearLayout
-        android:gravity="center_horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
 
         <Button
             android:id="@+id/setting_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="保存" />
-
-        <Button
-            android:id="@+id/setting_recovery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="恢复" />
+            android:text="Save" />
     </LinearLayout>
 </LinearLayout>

@@ -7,21 +7,19 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
 
-import java.util.concurrent.TimeUnit;
+import com.detect.amar.common.PreferencesUtils;
+import com.detect.amar.messagedetect.model.StdResponse;
+import com.detect.amar.messagedetect.setting.Setting;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
-public class MessageDetectMyService extends Service {
+public class MessageDetectService extends Service {
 
     String TAG = "home";
 
-    public MessageDetectMyService() {
+    public MessageDetectService() {
     }
 
     @Override
@@ -36,15 +34,14 @@ public class MessageDetectMyService extends Service {
 
         final Message message = intent.getParcelableExtra("message");
         if (message != null) {
-
-            //String url = "http://192.168.254.102:8080/simple/";
-            String url = "http://192.168.1.176:80";
+            String url = PreferencesUtils.getString( Setting.API_BASE_URL,"");
             RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(url).build();
             SendMessageService service = restAdapter.create(SendMessageService.class);
-            service.sendMessage(message.toMap(), new Callback<Response>() {
+            service.sendMessage(message.toMap(), new Callback<StdResponse>() {
                 @Override
-                public void success(Response response, retrofit.client.Response response2) {
-                    SharedPreferences mySharedPreferences = MessageDetectMyService.this.getSharedPreferences("MessageDetect", Activity.MODE_APPEND);
+                public void success(StdResponse stdResponse, retrofit.client.Response response2) {
+
+                    SharedPreferences mySharedPreferences = MessageDetectService.this.getSharedPreferences("MessageDetect", Activity.MODE_APPEND);
                     SharedPreferences.Editor editor = mySharedPreferences.edit();
                     message.setIsTrans(true);
 
@@ -55,7 +52,7 @@ public class MessageDetectMyService extends Service {
 
                 @Override
                 public void failure(RetrofitError error) {
-                    SharedPreferences mySharedPreferences = MessageDetectMyService.this.getSharedPreferences("MessageDetect", Activity.MODE_APPEND);
+                    SharedPreferences mySharedPreferences = MessageDetectService.this.getSharedPreferences("MessageDetect", Activity.MODE_APPEND);
                     SharedPreferences.Editor editor = mySharedPreferences.edit();
                     message.setIsTrans(false);
                     editor.putString("message", message.toString());
@@ -80,7 +77,5 @@ public class MessageDetectMyService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
-
     }
 }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.detect.amar.common.StringConverter;
+import com.detect.amar.messagedetect.model.StdResponse;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -84,15 +85,15 @@ public class HomeActivity extends AppCompatActivity {
 
     @OnClick(R.id.serviceStart)
     void serviceStart() {
-        Intent startIntent = new Intent(this, MessageDetectMyService.class);
+        Intent startIntent = new Intent(this, MessageDetectService.class);
         startService(startIntent);
         serviceStatusEdit.setText("已经启动");
     }
 
     @OnClick(R.id.serviceStop)
     void serviceStop() {
-        if (isServiceRunning(MessageDetectMyService.class.getName())) {
-            Intent stopIntent = new Intent(this, MessageDetectMyService.class);
+        if (isServiceRunning(MessageDetectService.class.getName())) {
+            Intent stopIntent = new Intent(this, MessageDetectService.class);
             stopService(stopIntent);
             serviceStatusEdit.setText("已经停止");
         } else {
@@ -104,10 +105,10 @@ public class HomeActivity extends AppCompatActivity {
     void clickNetBtn_sendMap_returnGson() {
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(sendPathEdit.getText().toString()).build();
         SendMessageService service = restAdapter.create(SendMessageService.class);
-        service.sendMessage(new Message("10086", "1581078", "hello amar", "2012-12-12 20:20:11", "2012-12-12 20:20:12").toMap(), new Callback<Response>() {
+        service.sendMessage(new Message().toMap(), new Callback<StdResponse>() {
             @Override
-            public void success(Response response, retrofit.client.Response response2) {
-                returnInfoEdit.setText(response.toString() + "#####" + response2.toString());
+            public void success(StdResponse stdResponse, retrofit.client.Response response2) {
+                returnInfoEdit.setText(stdResponse.toString() + "#####" + response2.toString());
             }
 
             @Override
@@ -144,7 +145,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @OnClick(R.id.serviceQuery)
     void serviceQuery() {
-        boolean isRunning = isServiceRunning(MessageDetectMyService.class.getName());
+        boolean isRunning = isServiceRunning(MessageDetectService.class.getName());
         if (isRunning)
             serviceStatusEdit.setText("is running");
         else

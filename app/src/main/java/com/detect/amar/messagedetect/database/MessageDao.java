@@ -71,7 +71,7 @@ public class MessageDao extends SQLiteOpenHelper {
         values.put("info", message.getInfo());
         values.put("transstatus", message.isTrans() ? 1 + "" : 0 + "");
         values.put("origindate", DatetimeUtil.datetimeToLong(message.getOrigindate()));
-        values.put("receivedate", DatetimeUtil.datetimeToLong(message.getReceivedate()));
+        values.put("receivedate", DatetimeUtil.datetimeToLong(message.getReceiveDate()));
         values.put("lastsenddate", message.getLastsenddate() != null && !"".equals(message.getLastsenddate()) ? DatetimeUtil.datetimeToLong(message.getLastsenddate()) + "" : "");
         values.put("transfail", message.getTransfail() == null ? "" : message.getTransfail());
         long returnInfo = getReadableDatabase().insert(Table_Name, null, values);
@@ -103,9 +103,10 @@ public class MessageDao extends SQLiteOpenHelper {
                 String receivedate = dbIntegerToDateString(cursor.getString(6));
                 String lastsenddate = dbIntegerToDateString(cursor.getString(7));
                 String transfail = cursor.getString(8);
-                //public Message( long id,String fromNumber,String toNumber, String info, String origindate, boolean isTrans,  String lastsenddate, String transfail, String receivedate)
-                Message messageItem = new Message(id, fromNumber, toNumber, info,origindate,transstatus,lastsenddate,transfail,receivedate);
-                messageList.add(messageItem);
+
+                //public Message(String fromNumber, String toNumber, String info, String origindate, String receiveDate, String sign, String lastsenddate, String transfail, boolean isTrans, String deviceSerial) {
+                //Message messageItem = new Message( fromNumber, toNumber, info,origindate,receivedate,"sign",lastsenddate,"",transstatus,,transfail,receivedate);
+                //messageList.add(messageItem);
                 cursor.moveToNext();
             }
             cursor.close();
@@ -141,7 +142,7 @@ public class MessageDao extends SQLiteOpenHelper {
         values.put("info", message.getInfo());
         values.put("transstatus", message.isTrans() ? 1 + "" : 0 + "");
         values.put("origindate", DatetimeUtil.datetimeToLong(message.getOrigindate()));
-        values.put("receivedate", DatetimeUtil.datetimeToLong(message.getReceivedate()));
+        values.put("receivedate", DatetimeUtil.datetimeToLong(message.getReceiveDate()));
         values.put("lastsenddate", message.isTrans() ? DatetimeUtil.longToDatetime(new Date().getTime()) : "");
         values.put("transfail", message.getTransfail() == null ? "" : message.getTransfail());
         int count = getReadableDatabase().update(Table_Name, values, "id=?", new String[]{message.getId() + ""});

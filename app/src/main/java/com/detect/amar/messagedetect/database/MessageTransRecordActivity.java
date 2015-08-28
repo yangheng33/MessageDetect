@@ -50,12 +50,12 @@ public class MessageTransRecordActivity extends AppCompatActivity {
 
     @OnClick(R.id.insertBtn)
     void clickInsertBtn() {
-        Message message = new Message("0", "158", "136", "hello 中国", "2015-08-09 20:01:01", false, "2012-12-13 22:22:22", "", "2015-12-11 11:11:11");
-
-        MessageDao messageDao = new MessageDao(this);
-
-        messageDao.insert(message);
-        Toast.makeText(this, "insert finish", Toast.LENGTH_SHORT).show();
+//        Message message = new Message("0", "158", "136", "hello 中国", "2015-08-09 20:01:01", false, "2012-12-13 22:22:22", "", "2015-12-11 11:11:11");
+//
+//        MessageDao messageDao = new MessageDao(this);
+//
+//        messageDao.insert(message);
+//        Toast.makeText(this, "insert finish", Toast.LENGTH_SHORT).show();
     }
 
 }

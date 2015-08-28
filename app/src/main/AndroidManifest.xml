@@ -1,36 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.detect.amar.messagedetect" >
+    package="com.detect.amar.messagedetect">
 
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
+        android:name="com.detect.amar.common.SApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".HomeActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:label="@string/app_name">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service
-            android:name=".MessageDetectMyService"
+            android:name=".MessageDetectService"
             android:enabled="true"
             android:exported="true" />
 
         <receiver
             android:name=".MessageReceiver"
             android:enabled="true"
-            android:exported="true" >
-            <intent-filter android:priority="20" >
+            android:exported="true">
+            <intent-filter android:priority="20">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="amar.android.notice" />
@@ -40,7 +37,7 @@
 
         <activity
             android:name=".database.MessageTransRecordActivity"
-            android:label="@string/title_activity_message_trans_record" >
+            android:label="@string/title_activity_message_trans_record">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -51,12 +48,18 @@
         </activity>
         <activity
             android:name=".setting.SettingActivity"
-            android:label="@string/title_activity_setting" >
-        </activity>
+            android:label="@string/title_activity_setting"/>
         <activity
             android:name=".main.MainActivity"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+        <activity
+            android:name=".log.LogActivity"
+            android:label="@string/title_activity_log"/>
     </application>
 
 </manifest>

@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.detect.amar.common.PhoneUtil;
 import com.detect.amar.messagedetect.R;
 
 import butterknife.Bind;
@@ -16,10 +18,15 @@ public class SettingActivity extends AppCompatActivity {
 
     @Bind(R.id.setting_api_url)
     EditText apiUrlEdit;
+    @Bind(R.id.setting_cycle_frequency)
+    EditText cycleFrequencyEdit;
     @Bind(R.id.setting_sim_1)
     EditText sim1Edit;
     @Bind(R.id.setting_sim_2)
     EditText sim2Edit;
+
+    @Bind(R.id.setting_dev_no)
+    EditText devNoEdit;
 
     Setting setting = null;
 
@@ -30,6 +37,16 @@ public class SettingActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setting = new Setting(this);
+
+        initUI(setting);
+    }
+
+    void initUI(Setting setting) {
+        apiUrlEdit.setText(setting.getApiUrl());
+        cycleFrequencyEdit.setText(setting.getCycleFrequency());
+        sim1Edit.setText(setting.getSim1());
+        sim2Edit.setText(setting.getSim2());
+        devNoEdit.setText(PhoneUtil.getDeviceNo(this));
     }
 
     @Override
@@ -43,12 +60,9 @@ public class SettingActivity extends AppCompatActivity {
         setting.setApiUrl(apiUrlEdit.getText().toString());
         setting.setSim1(sim1Edit.getText().toString());
         setting.setSim2(sim2Edit.getText().toString());
+        setting.setCycleFrequency(Integer.parseInt(cycleFrequencyEdit.getText().toString()));
+        Toast.makeText(this, "setup is complete", Toast.LENGTH_SHORT).show();
     }
 
-    @OnClick(R.id.setting_recovery)
-    void clickRecovery() {
-        apiUrlEdit.setText(setting.getApiUrl());
-        sim1Edit.setText(setting.getSim1());
-        sim2Edit.setText(setting.getSim2());
-    }
+
 }

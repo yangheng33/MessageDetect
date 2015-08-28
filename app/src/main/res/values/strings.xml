@@ -6,4 +6,8 @@
     <string name="title_activity_message_trans_record">MessageTransRecordActivity</string>
     <string name="title_activity_setting">SettingActivity</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_log">LogActivity</string>
+
+
+    <string name="goto_system_setting">System Setting</string>
 </resources>
