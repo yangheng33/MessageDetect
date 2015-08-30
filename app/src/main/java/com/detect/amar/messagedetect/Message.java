@@ -72,6 +72,13 @@ public class Message implements Parcelable {
         return map;
     }
 
+    public int getSimSlot() {
+        return simSlot;
+    }
+
+    public void setSimSlot(int simSlot) {
+        this.simSlot = simSlot;
+    }
 
     public String getFromNumber() {
         return fromNumber;

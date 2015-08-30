@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.telephony.SmsMessage;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.detect.amar.common.DatetimeUtil;
 import com.detect.amar.common.PhoneUtil;
@@ -21,14 +20,7 @@ public class MessageReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-
-            Toast.makeText(context, "call:" + Intent.ACTION_BOOT_COMPLETED, Toast.LENGTH_SHORT).show();
-            Intent newIntent = new Intent(context, HomeActivity.class);
-            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);  //注意，必须添加这个标记，否则启动会失败
-            context.startActivity(newIntent);
-
-        } else if (intent.getAction().equals(SMS_RECEIVED)) {
+        if (intent.getAction().equals(SMS_RECEIVED)) {
             Object[] pdus = (Object[]) intent.getExtras().get("pdus");
             if (pdus == null || pdus.length == 0)
                 return;
@@ -53,6 +45,10 @@ public class MessageReceiver extends BroadcastReceiver {
             }
         } else if (intent.getAction().equals(AMAR_NOTICE)) {
         } else if (intent.getAction().equals(SMS_CHANGE)) {
+        } else if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
+            Log.d(TAG, "开机启动啦");
+            Intent serviceIntent = new Intent(context, CheckStatusService.class);
+            context.startService(serviceIntent);
         }
     }
 }

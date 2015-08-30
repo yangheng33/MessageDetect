@@ -10,10 +10,33 @@
     tools:context="com.detect.amar.messagedetect.main.MainActivity">
 
     <TextView
+        android:textStyle="italic"
         android:id="@+id/gotoSystemSetting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/goto_system_setting" />
 
 
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/service_status"/>
+        <TextView
+            android:id="@+id/SystemStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""/>
+        <TextView
+            android:textStyle="italic"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/startService"
+            android:text="@string/click_start_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </LinearLayout>

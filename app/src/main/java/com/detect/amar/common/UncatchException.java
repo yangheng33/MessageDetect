@@ -64,10 +64,7 @@ public class UncatchException implements Thread.UncaughtExceptionHandler {
             }
             fw = new FileWriter(logFile, true);
             pw = new PrintWriter(fw);
-
-            //fw.write(crashReport);
             pw.write(crashReport);
-
             pw.close();
             fw.close();
         } catch (Exception e) {
@@ -88,15 +85,13 @@ public class UncatchException implements Thread.UncaughtExceptionHandler {
 
     /**
      * 获取APP崩溃异常报告
-     *
-     * @param ex
-     * @return
      */
     private String getCrashReport(Throwable ex) {
         StringBuilder exceptionStr = new StringBuilder();
         exceptionStr.append("Android: " + android.os.Build.VERSION.RELEASE + "(" + android.os.Build.MODEL + ")\n");
         exceptionStr.append("datetime: " + DatetimeUtil.longToDatetime(System.currentTimeMillis()) + "\n");
         exceptionStr.append("Exception: " + ex.getMessage() + "\n");
+        exceptionStr.append("***************************************\n\n\n");
 
         StackTraceElement[] elements = ex.getStackTrace();
         for (int i = 0; i < elements.length; i++) {

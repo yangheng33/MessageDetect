@@ -13,6 +13,7 @@ public class SApplication extends Application {
     public void onCreate() {
         super.onCreate();
         PreferencesUtils.setApplication(this);
+        ResourcesUtil.setApplication(this);
         Thread.setDefaultUncaughtExceptionHandler(new UncatchException());
     }
 

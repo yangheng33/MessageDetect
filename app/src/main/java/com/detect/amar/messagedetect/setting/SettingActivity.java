@@ -43,7 +43,7 @@ public class SettingActivity extends AppCompatActivity {
 
     void initUI(Setting setting) {
         apiUrlEdit.setText(setting.getApiUrl());
-        cycleFrequencyEdit.setText(setting.getCycleFrequency());
+        cycleFrequencyEdit.setText(setting.getCycleFrequency() + "");
         sim1Edit.setText(setting.getSim1());
         sim2Edit.setText(setting.getSim2());
         devNoEdit.setText(PhoneUtil.getDeviceNo(this));

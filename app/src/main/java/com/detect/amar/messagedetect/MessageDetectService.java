@@ -34,7 +34,15 @@ public class MessageDetectService extends Service {
 
         final Message message = intent.getParcelableExtra("message");
         if (message != null) {
-            String url = PreferencesUtils.getString( Setting.API_BASE_URL,"");
+            String messageTo = message.getSimSlot() + "";
+            if (message.getSimSlot() == 1)
+                messageTo = PreferencesUtils.getString(Setting.SIM_1);
+            else if (message.getSimSlot() == 2)
+                messageTo = PreferencesUtils.getString(Setting.SIM_2);
+
+            message.setToNumber(messageTo);
+
+            String url = PreferencesUtils.getString(Setting.API_BASE_URL, "");
             RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(url).build();
             SendMessageService service = restAdapter.create(SendMessageService.class);
             service.sendMessage(message.toMap(), new Callback<StdResponse>() {
@@ -47,7 +55,7 @@ public class MessageDetectService extends Service {
 
                     editor.putString("message", message.toString());
                     editor.apply();
-                    Log.d(TAG, "发送成功:"+message.toString());
+                    Log.d(TAG, "发送成功:" + message.toString());
                 }
 
                 @Override
@@ -57,7 +65,7 @@ public class MessageDetectService extends Service {
                     message.setIsTrans(false);
                     editor.putString("message", message.toString());
                     editor.apply();
-                    Log.d(TAG, "发送失败:"+message.toString()+"\n:原因,\n"+error.getMessage());
+                    Log.d(TAG, "发送失败:" + message.toString() + "\n:原因,\n" + error.getMessage());
                 }
             });
 

@@ -15,6 +15,8 @@ public class Setting {
     public static final String SIM_1 = "SIM_1";
     public static final String SIM_2 = "SIM_2";
     public static final String Cycle_Frequency = "Cycle_Frequency";
+    public static final int Cycle_Frequency_Default = 30;// TODO: 2015/8/30
+
 
     private Context _context;
 
@@ -30,7 +32,7 @@ public class Setting {
      * @return
      */
     public int getCycleFrequency() {
-        return PreferencesUtils.getInt(Cycle_Frequency, 300);
+        return PreferencesUtils.getInt(Cycle_Frequency, Cycle_Frequency_Default);
     }
 
     public String getApiUrl() {
