@@ -85,15 +85,15 @@ public class HomeActivity extends AppCompatActivity {
 
     @OnClick(R.id.serviceStart)
     void serviceStart() {
-        Intent startIntent = new Intent(this, MessageDetectService.class);
+        Intent startIntent = new Intent(this, MessageTransService.class);
         startService(startIntent);
         serviceStatusEdit.setText("已经启动");
     }
 
     @OnClick(R.id.serviceStop)
     void serviceStop() {
-        if (isServiceRunning(MessageDetectService.class.getName())) {
-            Intent stopIntent = new Intent(this, MessageDetectService.class);
+        if (isServiceRunning(MessageTransService.class.getName())) {
+            Intent stopIntent = new Intent(this, MessageTransService.class);
             stopService(stopIntent);
             serviceStatusEdit.setText("已经停止");
         } else {
@@ -104,7 +104,7 @@ public class HomeActivity extends AppCompatActivity {
     @OnClick(R.id.netBtn)
     void clickNetBtn_sendMap_returnGson() {
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(sendPathEdit.getText().toString()).build();
-        SendMessageService service = restAdapter.create(SendMessageService.class);
+        HttpService service = restAdapter.create(HttpService.class);
         service.sendMessage(new Message().toMap(), new Callback<StdResponse>() {
             @Override
             public void success(StdResponse stdResponse, retrofit.client.Response response2) {
@@ -124,7 +124,7 @@ public class HomeActivity extends AppCompatActivity {
 
         RestAdapter restAdapter = new RestAdapter.Builder().setConverter(new StringConverter(gson)).setEndpoint(sendPathEdit.getText().toString()).build();
 
-        SendMessageService service = restAdapter.create(SendMessageService.class);
+        HttpService service = restAdapter.create(HttpService.class);
         service.getHtml(new Callback<String>() {
             @Override
             public void success(String s, retrofit.client.Response response) {
@@ -145,7 +145,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @OnClick(R.id.serviceQuery)
     void serviceQuery() {
-        boolean isRunning = isServiceRunning(MessageDetectService.class.getName());
+        boolean isRunning = isServiceRunning(MessageTransService.class.getName());
         if (isRunning)
             serviceStatusEdit.setText("is running");
         else

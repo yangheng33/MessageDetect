@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MessageDetect</string>
+    <string name="app_name">Message</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -9,11 +9,16 @@
     <string name="title_activity_log">LogActivity</string>
 
 
-    <string name="goto_system_setting">System Setting</string>
+    <string name="goto_system_setting"><u>Go to System Setting</u></string>
     <string name="service_status">Service Status:</string>
     <string name="service_is_not_running">service_is_not_running</string>
     <string name="service_is_running">service is running</string>
+    <string name="service_is_starting">service is starting</string>
+    <string name="click_to_start_up"><u>Click to start up</u></string>
 
-    <string name="click_start_up">click start up</string>
-
+    <string name="save_fail_check_please">save fail,check net connection please!</string>
+    <string name="save_success">save success</string>
+    <string name="api_url">Api Url:</string>
+    <string name="frequency">Frequency:</string>
+    <string name="battery">Battery:</string>
 </resources>

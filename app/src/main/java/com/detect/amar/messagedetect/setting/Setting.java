@@ -15,8 +15,13 @@ public class Setting {
     public static final String SIM_1 = "SIM_1";
     public static final String SIM_2 = "SIM_2";
     public static final String Cycle_Frequency = "Cycle_Frequency";
-    public static final int Cycle_Frequency_Default = 30;// TODO: 2015/8/30
+    public static final String Sim_Status_1_Is_Allow = "Sim_Status_1_Is_Allow";
+    public static final String Sim_Status_2_Is_Allow = "Sim_Status_2_Is_Allow";
+    public static final String Current_Battery = "Current_Battery";
+    public static final String Battery_Status = "Battery_Status";
 
+    public static final int Cycle_Frequency_Default = 10;// TODO: 2015/8/30
+    public static final String Default_Api_Url = "http://192.168.1.185:81";
 
     private Context _context;
 
@@ -36,7 +41,7 @@ public class Setting {
     }
 
     public String getApiUrl() {
-        return PreferencesUtils.getString(API_BASE_URL, "");
+        return PreferencesUtils.getString(API_BASE_URL, Default_Api_Url);
     }
 
     public void setApiUrl(String apiUrl) {
@@ -57,5 +62,13 @@ public class Setting {
 
     public void setSim2(String sim2) {
         PreferencesUtils.putString(SIM_2, sim2);
+    }
+
+    public String getCurrentBattery() {
+        return PreferencesUtils.getString(Current_Battery, "0");
+    }
+
+    public String getCurrentBatteryStatus() {
+        return PreferencesUtils.getString(Battery_Status);
     }
 }

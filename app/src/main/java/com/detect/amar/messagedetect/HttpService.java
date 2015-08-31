@@ -15,7 +15,7 @@ import rx.Observable;
 /**
  * Created by SAM on 2015/8/21.
  */
-public interface SendMessageService {
+public interface HttpService {
 
     @POST("/test/add.jsp")
     Observable<StdResponse> sendMessage(@Body Message message);
@@ -29,6 +29,6 @@ public interface SendMessageService {
     @POST("/setsimcard.ashx")
     void sendSetting(@QueryMap Map<String,String> message,Callback<StdResponse> callback);
 
-    @POST("/setsimcardcheckstatus.ashx")
-    void getSimCardStatus(@QueryMap Map<String,String> message,Callback<CheckResponse> callback);
+    @POST("/checkstatus.ashx")
+    void getSimCardStatus(@QueryMap Map<String,String> message,Callback<StdResponse<CheckResponse>> callback);
 }

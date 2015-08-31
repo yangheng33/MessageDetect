@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.telephony.SmsMessage;
 import android.util.Log;
-
 import com.detect.amar.common.DatetimeUtil;
 import com.detect.amar.common.PhoneUtil;
 
@@ -32,10 +31,10 @@ public class MessageReceiver extends BroadcastReceiver {
                     String smsDate = DatetimeUtil.longToDatetime(smsMessage.getTimestampMillis());
                     String receiveDate = DatetimeUtil.longToDatetime(System.currentTimeMillis());
 
-                    int slot = intent.getIntExtra("simSlot", -1);//局限三星 gt s5282手机
+                    int slot = intent.getIntExtra("simSlot", -2) + 1;//局限三星 gt s5282手机 卡槽1的序号是0，卡槽2的序号是1,负数表示无效值
                     Log.d(TAG, smsMessage.toString() + ",slot:" + slot);
                     Message message = new Message(sender, slot, content, smsDate, receiveDate, PhoneUtil.getDeviceNo(context));
-                    Intent startIntent = new Intent(context, MessageDetectService.class);
+                    Intent startIntent = new Intent(context, MessageTransService.class);
                     startIntent.putExtra("message", message);
 
                     context.startService(startIntent);
@@ -46,9 +45,6 @@ public class MessageReceiver extends BroadcastReceiver {
         } else if (intent.getAction().equals(AMAR_NOTICE)) {
         } else if (intent.getAction().equals(SMS_CHANGE)) {
         } else if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-            Log.d(TAG, "开机启动啦");
-            Intent serviceIntent = new Intent(context, CheckStatusService.class);
-            context.startService(serviceIntent);
         }
     }
 }

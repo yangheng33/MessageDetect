@@ -2,6 +2,7 @@ package com.detect.amar.messagedetect;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.BatteryManager;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -65,6 +66,9 @@ public class CheckStatusService extends Service {
             @Override
             public void onNext(Long aLong) {
                 Log.d(Tag, "in the startCheck:" + cycleFrequency + "==>" + System.currentTimeMillis() / 1000);
+
+                setGetStatus();
+
                 startCheck();
             }
         });
@@ -73,18 +77,27 @@ public class CheckStatusService extends Service {
     public void setGetStatus() {
         Map<String, String> paramMap = new WeakHashMap<>();
         paramMap.put("device_no", PhoneUtil.getDeviceNo(this));
+        paramMap.put("battery_percentage", PreferencesUtils.getString(Setting.Current_Battery, "0"));
+        paramMap.put("battery_status", PreferencesUtils.getInt(Setting.Battery_Status, BatteryManager.BATTERY_STATUS_UNKNOWN) + "");
 
-        String url = PreferencesUtils.getString(Setting.API_BASE_URL, "");
+        String url = PreferencesUtils.getString(Setting.API_BASE_URL, Setting.Default_Api_Url);
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(url).build();
-        SendMessageService service = restAdapter.create(SendMessageService.class);
+        HttpService service = restAdapter.create(HttpService.class);
 
-        service.getSimCardStatus(paramMap, new Callback<CheckResponse>() {
+        service.getSimCardStatus(paramMap, new Callback<StdResponse<CheckResponse>>() {
             @Override
-            public void success(CheckResponse checkResponse, Response response) {
+            public void success(StdResponse<CheckResponse> stdResponse, Response response) {
+                Log.d(Tag, "success:" + stdResponse.toString());
+                boolean sim_1_status = !(stdResponse.getInfo().getStatus_sim_1() == null || "".equals(stdResponse.getInfo().getStatus_sim_1()) || "0".equals(stdResponse.getInfo().getStatus_sim_1()));
+                boolean sim_2_status = !(stdResponse.getInfo().getStatus_sim_2() == null || "".equals(stdResponse.getInfo().getStatus_sim_2()) || "0".equals(stdResponse.getInfo().getStatus_sim_2()));
+                PreferencesUtils.putInt(Setting.Cycle_Frequency, stdResponse.getInfo().getCycle_frequency());
+                PreferencesUtils.putBoolean(Setting.Sim_Status_1_Is_Allow, sim_1_status);
+                PreferencesUtils.putBoolean(Setting.Sim_Status_2_Is_Allow, sim_2_status);
             }
 
             @Override
             public void failure(RetrofitError error) {
+                Log.d(Tag, "error:" + error.getMessage());
             }
         });
     }

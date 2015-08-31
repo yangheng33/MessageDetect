@@ -3,11 +3,11 @@ package com.detect.amar.messagedetect.model;
 /**
  * Created by SAM on 2015/8/21.
  */
-public class StdResponse {
+public class StdResponse <T>{
 
      protected String status;
      protected String error;
-     protected String info;
+     protected T info;
 
     public String getError() {
         return error;
@@ -24,11 +24,11 @@ public class StdResponse {
         this.status = status;
     }
 
-    public String getInfo() {
+    public T getInfo() {
         return info;
     }
 
-    public void setInfo(String info) {
+    public void setInfo(T info) {
         this.info = info;
     }
 }
