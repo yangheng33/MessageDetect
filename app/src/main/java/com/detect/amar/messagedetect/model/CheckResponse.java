@@ -8,6 +8,15 @@ public class CheckResponse {
     private String status_sim_2;
     private int cycle_frequency;
 
+    private String versionCode;
+    private String versionName;
+    private String versionDesc;
+    private String downloadUrl;
+    /**
+     * 0强制升级，1不是强制升级
+     */
+    private int isForce;
+
     public String getStatus_sim_1() {
         return status_sim_1;
     }
@@ -30,5 +39,45 @@ public class CheckResponse {
 
     public void setCycle_frequency(int cycle_frequency) {
         this.cycle_frequency = cycle_frequency;
+    }
+
+    public String getVersionCode() {
+        return versionCode;
+    }
+
+    public void setVersionCode(String versionCode) {
+        this.versionCode = versionCode;
+    }
+
+    public String getVersionName() {
+        return versionName;
+    }
+
+    public void setVersionName(String versionName) {
+        this.versionName = versionName;
+    }
+
+    public String getVersionDesc() {
+        return versionDesc;
+    }
+
+    public void setVersionDesc(String versionDesc) {
+        this.versionDesc = versionDesc;
+    }
+
+    public String getDownloadUrl() {
+        return downloadUrl;
+    }
+
+    public void setDownloadUrl(String downloadUrl) {
+        this.downloadUrl = downloadUrl;
+    }
+
+    public int getIsForce() {
+        return isForce;
+    }
+
+    public void setIsForce(int isForce) {
+        this.isForce = isForce;
     }
 }
