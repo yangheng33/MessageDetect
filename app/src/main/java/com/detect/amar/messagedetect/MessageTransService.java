@@ -7,9 +7,17 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.detect.amar.common.DatetimeUtil;
 import com.detect.amar.common.PreferencesUtils;
+import com.detect.amar.common.SApplication;
+import com.detect.amar.messagedetect.db.DataBaseManager;
+import com.detect.amar.messagedetect.db.DatabaseHelper;
 import com.detect.amar.messagedetect.model.StdResponse;
 import com.detect.amar.messagedetect.setting.Setting;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
+
+import java.sql.SQLException;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -44,6 +52,14 @@ public class MessageTransService extends Service {
             }
             if (allowTrans) {
                 message.setToNumber(messageTo);
+
+                try {
+                    DataBaseManager.getHelper().getMessageDAO().create(message);
+                    Log.d(TAG, message.toString());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
                 String url = PreferencesUtils.getString(Setting.API_BASE_URL, Setting.Default_Api_Url);
                 RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(url).build();
                 HttpService service = restAdapter.create(HttpService.class);
@@ -51,17 +67,35 @@ public class MessageTransService extends Service {
                     @Override
                     public void success(StdResponse stdResponse, retrofit.client.Response response2) {
                         Log.d(TAG, "发送成功:" + message.toString());
+                        try {
+                            message.setIsTrans(true);
+                            message.setLastsenddate(DatetimeUtil.getDurrentDatetime());
+                            DataBaseManager.getHelper().getMessageDAO().update(message);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
                         Log.d(TAG, "发送失败:" + message.toString() + "\n:原因,\n" + error.getMessage());
+                        try {
+                            message.setIsTrans(false);
+                            message.setLastsenddate(DatetimeUtil.getDurrentDatetime());
+                            //message.setTransfail(error.getMessage().length() > 200 ? error.getMessage().substring(0, 200) : error.getMessage());
+                            message.setTransfail(error.getMessage());
+                            DataBaseManager.getHelper().getMessageDAO().update(message);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
             }
         }
         return super.onStartCommand(intent, flags, startId);
     }
+
+    //private DatabaseHelper databaseHelper;
 
     @Override
     public void onDestroy() {

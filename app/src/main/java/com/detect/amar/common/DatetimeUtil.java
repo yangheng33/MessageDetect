@@ -21,7 +21,6 @@ public class DatetimeUtil {
     }
 
     /**
-     *
      * @param longDate
      * @return yyyy-MM-dd HH:mm:ss
      */
@@ -42,5 +41,9 @@ public class DatetimeUtil {
             e.printStackTrace();
         }
         return longDate;
+    }
+
+    public static String getDurrentDatetime() {
+        return getSimpleDateFormat().format(System.currentTimeMillis());
     }
 }

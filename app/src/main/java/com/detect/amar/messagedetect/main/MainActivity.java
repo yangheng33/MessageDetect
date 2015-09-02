@@ -4,15 +4,21 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
 import com.detect.amar.common.ResourcesUtil;
+import com.detect.amar.common.SApplication;
 import com.detect.amar.common.ServiceUtils;
 import com.detect.amar.messagedetect.BatteryReceiver;
 import com.detect.amar.messagedetect.CheckStatusService;
 import com.detect.amar.messagedetect.R;
+import com.detect.amar.messagedetect.db.DataBaseManager;
+import com.detect.amar.messagedetect.log.ErrorLog;
 import com.detect.amar.messagedetect.setting.SettingActivity;
 
+import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
@@ -39,6 +45,17 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initUI();
         startBatteryReceiver();
+    }
+
+    void test() {
+        try {
+            ErrorLog errorLog = new ErrorLog("in mainactivity", "sssss");
+            DataBaseManager.getHelper().getErrorLogDAO().create(errorLog);
+
+            Log.d("home", errorLog.toString());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

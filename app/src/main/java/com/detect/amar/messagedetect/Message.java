@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.detect.amar.common.Encryption;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,20 +13,31 @@ import java.util.Map;
 /**
  * Created by SAM on 2015/8/21.
  */
+@DatabaseTable(tableName = "message")
 public class Message implements Parcelable {
 
+    @DatabaseField
     private String fromNumber;
+    @DatabaseField
     private String toNumber;
+    @DatabaseField
     private String info;
+    @DatabaseField
     private String origindate;//短信的原始时间
+    @DatabaseField
     private String receiveDate;//我们接收到短信的时间
-    private String sign;//签名字段，fromNumber+toNumber+info+origindate的md5值
+    @DatabaseField
     private int simSlot = 1;
+    private String sign;//签名字段，fromNumber+toNumber+info+origindate的md5值
 
     //仅限于本地数据库使用字段
-    private String id;
+    @DatabaseField(generatedId = true)
+    private int id;
+    @DatabaseField
     private String lastsenddate;//发送成功时间
+    @DatabaseField
     private String transfail;//最后一次发送失败原因（如果有）
+    @DatabaseField
     private boolean isTrans;//转发成功
 
     //仅限于转发数据时使用的字段
@@ -128,11 +141,11 @@ public class Message implements Parcelable {
         this.sign = sign;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -181,7 +194,7 @@ public class Message implements Parcelable {
         dest.writeString(this.origindate);
         dest.writeString(this.receiveDate);
         dest.writeString(this.sign);
-        dest.writeString(this.id);
+        dest.writeInt(this.id);
         dest.writeString(this.lastsenddate);
         dest.writeString(this.transfail);
         dest.writeByte(isTrans ? (byte) 1 : (byte) 0);
@@ -195,7 +208,7 @@ public class Message implements Parcelable {
         this.origindate = in.readString();
         this.receiveDate = in.readString();
         this.sign = in.readString();
-        this.id = in.readString();
+        this.id = in.readInt();
         this.lastsenddate = in.readString();
         this.transfail = in.readString();
         this.isTrans = in.readByte() != 0;
