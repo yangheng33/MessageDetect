@@ -31,4 +31,14 @@ public class StdResponse <T>{
     public void setInfo(T info) {
         this.info = info;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("StdResponse{");
+        sb.append("status='").append(status).append('\'');
+        sb.append(", error='").append(error).append('\'');
+        sb.append(", info=").append(info);
+        sb.append('}');
+        return sb.toString();
+    }
 }

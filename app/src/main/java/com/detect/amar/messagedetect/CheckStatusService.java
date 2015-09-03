@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.detect.amar.common.PhoneUtil;
 import com.detect.amar.common.PreferencesUtils;
+import com.detect.amar.messagedetect.log.ErrorLogUtil;
 import com.detect.amar.messagedetect.model.CheckResponse;
 import com.detect.amar.messagedetect.model.StdResponse;
 import com.detect.amar.messagedetect.setting.Setting;
@@ -60,6 +61,7 @@ public class CheckStatusService extends Service {
             @Override
             public void onError(Throwable e) {
                 Log.d(Tag, "in the startCheck_error" + e.getMessage());
+                ErrorLogUtil.add("cycle", e.getMessage());
                 startCheck();
             }
 
@@ -88,16 +90,22 @@ public class CheckStatusService extends Service {
             @Override
             public void success(StdResponse<CheckResponse> stdResponse, Response response) {
                 Log.d(Tag, "success:" + stdResponse.toString());
-                boolean sim_1_status = !(stdResponse.getInfo().getStatus_sim_1() == null || "".equals(stdResponse.getInfo().getStatus_sim_1()) || "0".equals(stdResponse.getInfo().getStatus_sim_1()));
-                boolean sim_2_status = !(stdResponse.getInfo().getStatus_sim_2() == null || "".equals(stdResponse.getInfo().getStatus_sim_2()) || "0".equals(stdResponse.getInfo().getStatus_sim_2()));
-                PreferencesUtils.putInt(Setting.Cycle_Frequency, stdResponse.getInfo().getCycle_frequency());
-                PreferencesUtils.putBoolean(Setting.Sim_Status_1_Is_Allow, sim_1_status);
-                PreferencesUtils.putBoolean(Setting.Sim_Status_2_Is_Allow, sim_2_status);
+                try {
+                    boolean sim_1_status = !(stdResponse.getInfo().getStatus_sim_1() == null || "".equals(stdResponse.getInfo().getStatus_sim_1()) || "0".equals(stdResponse.getInfo().getStatus_sim_1()));
+                    boolean sim_2_status = !(stdResponse.getInfo().getStatus_sim_2() == null || "".equals(stdResponse.getInfo().getStatus_sim_2()) || "0".equals(stdResponse.getInfo().getStatus_sim_2()));
+                    PreferencesUtils.putInt(Setting.Cycle_Frequency, stdResponse.getInfo().getCycle_frequency());
+                    PreferencesUtils.putBoolean(Setting.Sim_Status_1_Is_Allow, sim_1_status);
+                    PreferencesUtils.putBoolean(Setting.Sim_Status_2_Is_Allow, sim_2_status);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ErrorLogUtil.add("get Status success ,but",e.getMessage());
+                }
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.d(Tag, "error:" + error.getMessage());
+                ErrorLogUtil.add("get Status failure",error.getMessage());
             }
         });
     }

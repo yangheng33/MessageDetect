@@ -10,6 +10,8 @@
 
 
     <string name="goto_system_setting"><u>Go to System Setting</u></string>
+    <string name="goto_error_log"><u>Go to error log</u></string>
+
     <string name="service_status">Service Status:</string>
     <string name="service_is_not_running">service_is_not_running</string>
     <string name="service_is_running">service is running</string>
@@ -21,4 +23,5 @@
     <string name="api_url">Api Url:</string>
     <string name="frequency">Frequency:</string>
     <string name="battery">Battery:</string>
+    <string name="title_activity_error_log">ErrorLogActivity</string>
 </resources>

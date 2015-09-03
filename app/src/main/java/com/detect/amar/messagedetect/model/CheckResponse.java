@@ -80,4 +80,19 @@ public class CheckResponse {
     public void setIsForce(int isForce) {
         this.isForce = isForce;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("CheckResponse{");
+        sb.append("status_sim_1='").append(status_sim_1).append('\'');
+        sb.append(", status_sim_2='").append(status_sim_2).append('\'');
+        sb.append(", cycle_frequency=").append(cycle_frequency);
+        sb.append(", versionCode='").append(versionCode).append('\'');
+        sb.append(", versionName='").append(versionName).append('\'');
+        sb.append(", versionDesc='").append(versionDesc).append('\'');
+        sb.append(", downloadUrl='").append(downloadUrl).append('\'');
+        sb.append(", isForce=").append(isForce);
+        sb.append('}');
+        return sb.toString();
+    }
 }
