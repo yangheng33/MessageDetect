@@ -9,18 +9,19 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.lb.android.sportsbook.R;
+import com.detect.amar.messagedetect.widget.SlideRecyclerView;
+import com.detect.amar.messagedetect.widget.SlideView;
 
 import java.util.List;
 
 /**
  * Created by SAM on 2015/8/2.
  */
-public class BaseSlideAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
-    private List<OddBetItem> _data;
+public abstract class BaseSlideAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
+    private List<T> _data;
     private LayoutInflater _layoutInflater;
     private Activity _activity;
-    private RecyclerView _parplayListView;
+    private SlideRecyclerView _listView;
 
 
     public void delete()
@@ -29,58 +30,63 @@ public class BaseSlideAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
 
-    public BaseSlideAdapter(Activity activity, RecyclerView parplayListView) {
+    public BaseSlideAdapter(Activity activity, SlideRecyclerView listView) {
         _activity = activity;
         _layoutInflater = LayoutInflater.from(_activity);
-        _parplayListView = parplayListView;
+        _listView = listView;
     }
 
-    public void setData(List<OddBetItem> data) {
+    public void setData(List<T> data) {
         this._data = data;
         this.notifyDataSetChanged();
     }
 
-    public List<OddBetItem> getData() {
+    public List<T> getData() {
         return _data;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        SlideView slideView = new SlideView(_activity);
-        View itemView = _layoutInflater.inflate(R.layout.check_parplay_item, null);
+
+        SlideView slideView = new SlideView(_activity,_listView.getSlideViewLayoutResId(),_listView.getSlideViewContentResId(),_listView.getSlideWidth());
+
+        View itemView = _layoutInflater.inflate(_listView.getRowViewLayoutResId(), null);
         slideView.setContentView(itemView);
-        ContentViewHolder contentViewHolder = new ContentViewHolder(slideView);
-        return contentViewHolder;
+        //ContentViewHolder contentViewHolder = new ContentViewHolder(slideView);
+
+        return getViewHolder(slideView);
     }
+
+    public abstract RecyclerView.ViewHolder getViewHolder(View view);
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
 
-        if (viewHolder instanceof ContentViewHolder) {
-            ContentViewHolder holder = (ContentViewHolder) viewHolder;
-
-            OddBetItem oddBetItem = getData().get(position);
-            holder.categoryTxt.setText(oddBetItem.getCategory());
-            holder.teamHomeTxt.setText(oddBetItem.getTeamHome());
-            holder.teamAwayTxt.setText(oddBetItem.getTeamAway());
-            holder.oddTxt.setText(oddBetItem.getOdd());
-            holder.oddTypeTxt.setText(oddBetItem.getOddType());
-            holder.betTeamTxt.setText(oddBetItem.getBetTeam());
-
-            if (_isChooseable) {
-                holder.deleteChk.setVisibility(View.VISIBLE);
-            } else {
-                holder.deleteChk.setVisibility(View.GONE);
-            }
-
-            holder.deleteChk.setTag(position);
-            holder.deleteChk.setChecked(oddBetItem.isSelected());
-            holder.deleteChk.setOnClickListener(this);
-
-            holder.deleteTxt.setOnClickListener(deleteItemListener);
-            holder.deleteTxt.setTag(position);
-            holder.slideView.setOnSlideListener((SlideView.OnSlideListener) _activity);
-        }
+//        if (viewHolder instanceof ContentViewHolder) {
+//            ContentViewHolder holder = (ContentViewHolder) viewHolder;
+//
+//            OddBetItem oddBetItem = getData().get(position);
+//            holder.categoryTxt.setText(oddBetItem.getCategory());
+//            holder.teamHomeTxt.setText(oddBetItem.getTeamHome());
+//            holder.teamAwayTxt.setText(oddBetItem.getTeamAway());
+//            holder.oddTxt.setText(oddBetItem.getOdd());
+//            holder.oddTypeTxt.setText(oddBetItem.getOddType());
+//            holder.betTeamTxt.setText(oddBetItem.getBetTeam());
+//
+//            if (_isChooseable) {
+//                holder.deleteChk.setVisibility(View.VISIBLE);
+//            } else {
+//                holder.deleteChk.setVisibility(View.GONE);
+//            }
+//
+//            holder.deleteChk.setTag(position);
+//            holder.deleteChk.setChecked(oddBetItem.isSelected());
+//            holder.deleteChk.setOnClickListener(this);
+//
+//            holder.deleteTxt.setOnClickListener(deleteItemListener);
+//            holder.deleteTxt.setTag(position);
+//            holder.slideView.setOnSlideListener((SlideView.OnSlideListener) _activity);
+//        }
     }
 
     public View.OnClickListener deleteItemListener = new View.OnClickListener() {
@@ -93,11 +99,11 @@ public class BaseSlideAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onClick(View view) {
         if (view instanceof CheckBox) {
-            CheckBox deleteChk = (CheckBox) view;
-            int clickedPos = (int) (deleteChk.getTag());
-            OddBetItem oddBetItem = getData().get(clickedPos);
-            boolean selected = !oddBetItem.isSelected();
-            oddBetItem.setIsSelected(selected);
+//            CheckBox deleteChk = (CheckBox) view;
+//            int clickedPos = (int) (deleteChk.getTag());
+//            OddBetItem oddBetItem = getData().get(clickedPos);
+//            boolean selected = !oddBetItem.isSelected();
+//            oddBetItem.setIsSelected(selected);
         }
     }
 
@@ -119,29 +125,29 @@ public class BaseSlideAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    public static class ContentViewHolder extends RecyclerView.ViewHolder {
-
-        TextView categoryTxt;
-        TextView teamHomeTxt;
-        TextView teamAwayTxt;
-        TextView oddTxt;
-        TextView oddTypeTxt;
-        TextView betTeamTxt;
-        CheckBox deleteChk;
-        TextView deleteTxt;
-        SlideView slideView;
-
-        public ContentViewHolder(View itemView) {
-            super(itemView);
-            slideView = (SlideView) itemView;
-            categoryTxt = (TextView) itemView.findViewById(R.id.parplay_item_team_category);
-            teamHomeTxt = (TextView) itemView.findViewById(R.id.parplay_item_team_home);
-            teamAwayTxt = (TextView) itemView.findViewById(R.id.parplay_item_team_away);
-            oddTxt = (TextView) itemView.findViewById(R.id.parplay_item_odd);
-            oddTypeTxt = (TextView) itemView.findViewById(R.id.parplay_item_odd_type);
-            betTeamTxt = (TextView) itemView.findViewById(R.id.parplay_item_bet_team);
-            deleteChk = (CheckBox) itemView.findViewById(R.id.parplay_item_choose);
-            deleteTxt = (TextView) itemView.findViewById(R.id.delete);
-        }
-    }
+//    public static class ContentViewHolder extends RecyclerView.ViewHolder {
+//
+//        TextView categoryTxt;
+//        TextView teamHomeTxt;
+//        TextView teamAwayTxt;
+//        TextView oddTxt;
+//        TextView oddTypeTxt;
+//        TextView betTeamTxt;
+//        CheckBox deleteChk;
+//        TextView deleteTxt;
+//        SlideView slideView;
+//
+//        public ContentViewHolder(View itemView) {
+//            super(itemView);
+//            slideView = (SlideView) itemView;
+//            categoryTxt = (TextView) itemView.findViewById(R.id.parplay_item_team_category);
+//            teamHomeTxt = (TextView) itemView.findViewById(R.id.parplay_item_team_home);
+//            teamAwayTxt = (TextView) itemView.findViewById(R.id.parplay_item_team_away);
+//            oddTxt = (TextView) itemView.findViewById(R.id.parplay_item_odd);
+//            oddTypeTxt = (TextView) itemView.findViewById(R.id.parplay_item_odd_type);
+//            betTeamTxt = (TextView) itemView.findViewById(R.id.parplay_item_bet_team);
+//            deleteChk = (CheckBox) itemView.findViewById(R.id.parplay_item_choose);
+//            deleteTxt = (TextView) itemView.findViewById(R.id.delete);
+//        }
+//    }
 }

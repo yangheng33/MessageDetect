@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="slideView">
-        <attr name="layoutResId" format="reference" />
-        <attr name="contentResId" format="reference" />
+        <attr name="slideLayoutResId" format="reference" />
+        <attr name="slideContentResId" format="reference" />
+        <attr name="slideWidth" format="integer"/>
+        <attr name="rowViewLayoutResId" format="reference"/>
     </declare-styleable>
 </resources>
