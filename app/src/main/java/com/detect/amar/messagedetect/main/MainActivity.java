@@ -9,14 +9,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.detect.amar.common.ResourcesUtil;
-import com.detect.amar.common.SApplication;
 import com.detect.amar.common.ServiceUtils;
 import com.detect.amar.messagedetect.BatteryReceiver;
 import com.detect.amar.messagedetect.CheckStatusService;
 import com.detect.amar.messagedetect.R;
 import com.detect.amar.messagedetect.db.DataBaseManager;
 import com.detect.amar.messagedetect.log.ErrorLog;
-import com.detect.amar.messagedetect.log.LogActivity;
+import com.detect.amar.messagedetect.log.ErrorLogActivity;
 import com.detect.amar.messagedetect.setting.SettingActivity;
 
 import java.sql.SQLException;
@@ -136,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.gotoErrorLog)
     void gotoErrorLog() {
-        Intent intent = new Intent(MainActivity.this, LogActivity.class);
+        Intent intent = new Intent(MainActivity.this, ErrorLogActivity.class);
         startActivity(intent);
     }
 

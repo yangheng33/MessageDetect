@@ -16,7 +16,6 @@ public class SlideRecyclerView extends RecyclerView {
 
     private SlideView mFocusedItemView;
     private int slideViewLayoutResId;
-    private int slideViewContentResId;
     private int slideWidth;
     private int rowViewLayoutResId;
 
@@ -36,12 +35,9 @@ public class SlideRecyclerView extends RecyclerView {
 
     private void setAttributes(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.slideView);
-        slideViewLayoutResId = typedArray.getInt(R.styleable.slideView_slideLayoutResId, 0);
-        slideViewContentResId = typedArray.getInt(R.styleable.slideView_slideContentResId, 0);
-
-        slideWidth = typedArray.getInt(R.styleable.slideView_slideWidth, 60);
-
-        rowViewLayoutResId = typedArray.getInt(R.styleable.slideView_rowViewLayoutResId,0);
+        slideViewLayoutResId = typedArray.getResourceId(R.styleable.slideView_slideLayoutResId, 0);
+        slideWidth = typedArray.getDimensionPixelSize(R.styleable.slideView_slideWidth, 60);
+        rowViewLayoutResId = typedArray.getResourceId(R.styleable.slideView_rowViewLayoutResId,0);
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -63,10 +59,6 @@ public class SlideRecyclerView extends RecyclerView {
 
     public int getSlideViewLayoutResId() {
         return slideViewLayoutResId;
-    }
-
-    public int getSlideViewContentResId() {
-        return slideViewContentResId;
     }
 
     public int getSlideWidth() {

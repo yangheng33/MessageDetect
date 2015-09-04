@@ -1,7 +1,6 @@
 package com.detect.amar.messagedetect.widget;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -13,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.Scroller;
 
 import com.detect.amar.messagedetect.R;
-
 
 /**
  * Created by SAM on 2015/8/4.
@@ -68,12 +66,12 @@ public class SlideView extends LinearLayout {
         super(context, attrs);
     }
 
-    public SlideView(Context context, int slideViewLayoutResId, int contentResId, int sliderWidth) {
+    public SlideView(Context context, int slideViewLayoutResId,int sliderWidth) {
         super(context);
-        initView(slideViewLayoutResId, contentResId, sliderWidth);
+        initView(slideViewLayoutResId, sliderWidth);
     }
 
-    private void initView(int slideViewLayoutResId, int contentResId, int sliderWidth) {
+    private void initView(int slideViewLayoutResId, int sliderWidth) {
         mContext = getContext();
         // 初始化弹性滑动对象
         mScroller = new Scroller(mContext);
@@ -83,23 +81,7 @@ public class SlideView extends LinearLayout {
         mHolderWidth = sliderWidth;
         // 将 slide_view_merge 加载进来
         View.inflate(mContext, slideViewLayoutResId, this);
-        mViewContent = (LinearLayout) findViewById(contentResId);
-        mHolderWidth = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mHolderWidth, getResources().getDisplayMetrics()));
-    }
-
-//    public void setWidth(int width) {
-//        mHolderWidth = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, width, getResources().getDisplayMetrics()));
-//    }
-
-    /**
-     * @param rootView
-     * @param contentView 平时展现的内容
-     * @param width
-     */
-    public void setParameter(View rootView, ViewGroup contentView, int width) {
-        this.addView(rootView);
-        mViewContent = contentView;
-        mHolderWidth = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, width, getResources().getDisplayMetrics()));
+        mViewContent = (LinearLayout) findViewById(R.id.slide_content);//暂时先这样
     }
 
     // 将view加入到ViewContent中

@@ -17,18 +17,35 @@ import java.util.List;
 /**
  * Created by SAM on 2015/8/2.
  */
-public abstract class BaseSlideAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
+public abstract class BaseSlideAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener, SlideView.OnSlideListener {
     private List<T> _data;
     private LayoutInflater _layoutInflater;
     private Activity _activity;
     private SlideRecyclerView _listView;
 
-
-    public void delete()
-    {
+    public void delete() {
 
     }
 
+
+    private SlideView mLastSlideViewWithStatusOn;
+
+    @Override
+    public void onSlide(View view, int status) {
+        if (mLastSlideViewWithStatusOn != null && mLastSlideViewWithStatusOn != view) {
+            mLastSlideViewWithStatusOn.shrink();
+        }
+
+        if (status == SLIDE_STATUS_ON) {
+            mLastSlideViewWithStatusOn = (SlideView) view;
+        }
+    }
+
+    public void shrink() {
+        if (mLastSlideViewWithStatusOn != null) {
+            mLastSlideViewWithStatusOn.shrink();
+        }
+    }
 
     public BaseSlideAdapter(Activity activity, SlideRecyclerView listView) {
         _activity = activity;
@@ -48,7 +65,7 @@ public abstract class BaseSlideAdapter<T> extends RecyclerView.Adapter<RecyclerV
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
 
-        SlideView slideView = new SlideView(_activity,_listView.getSlideViewLayoutResId(),_listView.getSlideViewContentResId(),_listView.getSlideWidth());
+        SlideView slideView = new SlideView(_activity, _listView.getSlideViewLayoutResId(), _listView.getSlideWidth());
 
         View itemView = _layoutInflater.inflate(_listView.getRowViewLayoutResId(), null);
         slideView.setContentView(itemView);

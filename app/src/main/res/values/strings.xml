@@ -8,7 +8,6 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_log">LogActivity</string>
 
-
     <string name="goto_system_setting"><u>Go to System Setting</u></string>
     <string name="goto_error_log"><u>Go to error log</u></string>
 
@@ -24,4 +23,10 @@
     <string name="frequency">Frequency:</string>
     <string name="battery">Battery:</string>
     <string name="title_activity_error_log">ErrorLogActivity</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="cancel">Cancel</string>
+    <string name="all">All</string>
+    <string name="query">Query</string>
+
 </resources>

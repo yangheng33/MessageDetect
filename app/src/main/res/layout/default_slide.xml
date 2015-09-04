@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <LinearLayout
-        android:id="@+id/view_content"
+        android:id="@+id/slide_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal" >
@@ -12,18 +12,20 @@
 
     <RelativeLayout
         android:id="@+id/holder"
-        android:layout_width="120dp"
+        android:layout_width="100dp"
         android:layout_height="match_parent"
         android:clickable="true"
-        android:background="#ff0000">
+        >
 
-        <TextView
-            android:id="@+id/delete"
+        <Button
+            android:background="@color/red"
+            android:textColor="@color/white"
+            android:id="@+id/delete_single"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="删除" />
+            android:text="@string/delete" />
     </RelativeLayout>
 
 </merge>
