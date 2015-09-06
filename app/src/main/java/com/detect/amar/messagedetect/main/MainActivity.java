@@ -17,6 +17,7 @@ import com.detect.amar.messagedetect.db.DataBaseManager;
 import com.detect.amar.messagedetect.log.ErrorLog;
 import com.detect.amar.messagedetect.log.ErrorLogActivity;
 import com.detect.amar.messagedetect.setting.SettingActivity;
+import com.detect.amar.messagedetect.version.VersionActivity;
 
 import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
@@ -136,6 +137,12 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.gotoErrorLog)
     void gotoErrorLog() {
         Intent intent = new Intent(MainActivity.this, ErrorLogActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.gotoVersion)
+    void gotoVersion() {
+        Intent intent = new Intent(MainActivity.this, VersionActivity.class);
         startActivity(intent);
     }
 

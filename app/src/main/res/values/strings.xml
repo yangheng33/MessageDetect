@@ -22,11 +22,21 @@
     <string name="api_url">Api Url:</string>
     <string name="frequency">Frequency:</string>
     <string name="battery">Battery:</string>
-    <string name="title_activity_error_log">ErrorLogActivity</string>
+
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="cancel">Cancel</string>
     <string name="all">All</string>
     <string name="query">Query</string>
+    <string name="go_to_version"><u>Go to Version</u></string>
+    <string name="version">Version</string>
+    <string name="current_version">Current Version Name:</string>
+    <string name="check_update">Check Update</string>
 
+    <string name="update_immediately">Update Immediately</string>
+    <string name="agree">Agree</string>
+    <string name="next_time">Next time</string>
+
+    <string name="title_activity_version">VersionActivity</string>
+    <string name="title_activity_error_log">ErrorLogActivity</string>
 </resources>

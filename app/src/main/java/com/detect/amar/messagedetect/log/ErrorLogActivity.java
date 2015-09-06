@@ -1,12 +1,8 @@
 package com.detect.amar.messagedetect.log;
 
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,7 +11,6 @@ import com.detect.amar.common.ResourcesUtil;
 import com.detect.amar.messagedetect.R;
 import com.detect.amar.messagedetect.db.DataBaseManager;
 import com.detect.amar.messagedetect.widget.SlideRecyclerView;
-import com.detect.amar.messagedetect.widget.SlideView;
 import com.detect.amar.messagedetect.widget.SpacesItemDecoration;
 
 import java.sql.SQLException;

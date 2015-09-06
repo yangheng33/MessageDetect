@@ -71,6 +71,10 @@
             android:name=".log.ErrorLogActivity"
             android:label="@string/title_activity_error_log" >
         </activity>
+        <activity
+            android:name=".version.VersionActivity"
+            android:label="@string/title_activity_version" >
+        </activity>
     </application>
 
 </manifest>
