@@ -10,12 +10,24 @@ import java.util.Date;
  */
 public class DatetimeUtil {
 
+    private static SimpleDateFormat _simpleDateTimeFormat;
     private static SimpleDateFormat _simpleDateFormat;
+    public static String DayStart = "00:00:00";
+    public static String DayEnd = "23:59:59";
+
+
+    private static SimpleDateFormat getSimpleDatetimeFormat() {
+        if (_simpleDateTimeFormat == null) {
+            _simpleDateTimeFormat = (SimpleDateFormat) SimpleDateFormat.getDateTimeInstance();
+            _simpleDateTimeFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
+        }
+        return _simpleDateTimeFormat;
+    }
 
     private static SimpleDateFormat getSimpleDateFormat() {
         if (_simpleDateFormat == null) {
             _simpleDateFormat = (SimpleDateFormat) SimpleDateFormat.getDateTimeInstance();
-            _simpleDateFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
+            _simpleDateFormat.applyPattern("yyyy-MM-dd");
         }
         return _simpleDateFormat;
     }
@@ -26,7 +38,7 @@ public class DatetimeUtil {
      */
     public static String longToDatetime(long longDate) {
 
-        return getSimpleDateFormat().format(new Date(longDate));
+        return getSimpleDatetimeFormat().format(new Date(longDate));
     }
 
     /**
@@ -36,7 +48,7 @@ public class DatetimeUtil {
     public static long datetimeToLong(String datetime) {
         long longDate = 0L;
         try {
-            longDate = getSimpleDateFormat().parse(datetime).getTime();
+            longDate = getSimpleDatetimeFormat().parse(datetime).getTime();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -44,6 +56,24 @@ public class DatetimeUtil {
     }
 
     public static String getDurrentDatetime() {
+        return getSimpleDatetimeFormat().format(System.currentTimeMillis());
+    }
+
+    public static String getDurrentDate() {
         return getSimpleDateFormat().format(System.currentTimeMillis());
+    }
+
+    /**
+     * @param datetime yyyy-MM-dd
+     * @return
+     */
+    public static long dateToLong(String datetime) {
+        long longDate = 0L;
+        try {
+            longDate = getSimpleDateFormat().parse(datetime).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return longDate;
     }
 }

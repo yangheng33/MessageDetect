@@ -9,49 +9,67 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.detect.amar.messagedetect.log.ErrorLogActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp">
+
+        <EditText
+            android:id="@+id/error_from"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="2014-11-01"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/error_to"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/error_from"
+            android:text="2014-11-01"
+            android:textSize="12sp" />
+
         <TextView
             android:layout_marginLeft="5dp"
+            android:id="@+id/error_query"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/error_from"
+            android:layout_toRightOf="@+id/error_to"
+            android:text="@string/query" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/error_select_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/error_from"
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/error_multi_delete"
+            android:text="@string/all" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/error_multi_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/error_from"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/error_edit"
+            android:text="@string/delete" />
+
+        <TextView
             android:id="@+id/error_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/error_from"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:text="@string/edit" />
-        <TextView
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/error_select_all"
-            android:text="@string/all"/>
-        <TextView
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/error_multi_delete"
-            android:text="@string/delete"/>
-        <EditText
-            android:id="@+id/error_from"
-            android:textSize="12sp"
-            android:text="2014-11-01"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content" />
-        <EditText
-            android:id="@+id/error_to"
-            android:textSize="12sp"
-            android:text="2014-11-01"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/error_query"
-            android:text="@string/query"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
         android:id="@+id/error_divier"

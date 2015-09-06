@@ -17,7 +17,7 @@ import com.detect.amar.messagedetect.widget.SlideView;
 /**
  * Created by amar on 15/9/4.
  */
-public class ErrorLogAdapter extends BaseSlideAdapter<ErrorLog> {
+public class ErrorLogAdapter extends BaseSlideAdapter<ErrorLog> implements View.OnClickListener {
 
     public ErrorLogAdapter(Activity activity, SlideRecyclerView listView) {
         super(activity, listView);
@@ -40,6 +40,7 @@ public class ErrorLogAdapter extends BaseSlideAdapter<ErrorLog> {
         return new ErrorLogViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof ErrorLogViewHolder) {
@@ -52,6 +53,25 @@ public class ErrorLogAdapter extends BaseSlideAdapter<ErrorLog> {
             holder.idTxt.setText("id:" + item.getId());
             holder.singleDeleteBtn.setTag(position);
             holder.slideView.setOnSlideListener(this);
+            if (_isChooseable) {
+                holder.deleteChk.setVisibility(View.VISIBLE);
+            } else {
+                holder.deleteChk.setVisibility(View.GONE);
+            }
+            holder.deleteChk.setOnClickListener(this);
+            holder.deleteChk.setTag(position);
+            holder.deleteChk.setChecked(item.isChecked());
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view instanceof CheckBox) {
+            CheckBox deleteChk = (CheckBox) view;
+            int clickedPos = (int) (deleteChk.getTag());
+            ErrorLog errorLog = getData().get(clickedPos);
+            boolean selected = !errorLog.isChecked();
+            errorLog.setIsChecked(selected);
         }
     }
 

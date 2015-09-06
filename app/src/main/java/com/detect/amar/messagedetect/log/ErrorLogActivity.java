@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.detect.amar.common.DatetimeUtil;
 import com.detect.amar.common.ResourcesUtil;
 import com.detect.amar.messagedetect.R;
 import com.detect.amar.messagedetect.db.DataBaseManager;
@@ -18,6 +19,7 @@ import com.detect.amar.messagedetect.widget.SlideView;
 import com.detect.amar.messagedetect.widget.SpacesItemDecoration;
 
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.Bind;
@@ -45,6 +47,26 @@ public class ErrorLogActivity extends AppCompatActivity {
     List<ErrorLog> errorLogList = null;
 
     boolean isEdit = false;
+    boolean isSelectAll = false;
+
+    @OnClick(R.id.error_multi_delete)
+    void deleteChecked() {
+        if (errorLogList != null && errorLogList.size() > 0) {
+            Iterator<ErrorLog> errorLogIterator = errorLogList.iterator();
+            while (errorLogIterator.hasNext()) {
+                ErrorLog errorLog = errorLogIterator.next();
+                if (errorLog.isChecked()) {
+                    try {
+                        errorLogIterator.remove();
+                        DataBaseManager.getHelper().getErrorLogDAO().delete(errorLog);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            errorLogAdapter.setData(errorLogList);
+        }
+    }
 
     @OnClick(R.id.error_edit)
     void clickEditTxt() {
@@ -52,11 +74,43 @@ public class ErrorLogActivity extends AppCompatActivity {
             editTxt.setText(ResourcesUtil.getString(R.string.edit));
             isEdit = false;
             errorLogAdapter.setIsChooseable(false);
+            selectAllTxt.setVisibility(View.GONE);
+            multiDeleteTxt.setVisibility(View.GONE);
         } else {
             editTxt.setText(ResourcesUtil.getString(R.string.cancel));
             isEdit = true;
             errorLogAdapter.setIsChooseable(true);
             errorLogAdapter.shrink();
+            selectAllTxt.setVisibility(View.VISIBLE);
+            multiDeleteTxt.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @OnClick(R.id.error_select_all)
+    void clickSelectAll() {
+        isSelectAll = !isSelectAll;
+        setSelected(isSelectAll);
+        errorLogAdapter.setData(errorLogList);
+    }
+
+    void setSelected(boolean selected) {
+        if (errorLogList != null && errorLogList.size() > 0) {
+            for (ErrorLog errorLog : errorLogList) {
+                errorLog.setIsChecked(selected);
+            }
+        }
+    }
+
+    @OnClick(R.id.error_query)
+    void clickQuery() {
+        long startDate = DatetimeUtil.dateToLong(fromDateTxt.getText().toString() + " " + DatetimeUtil.DayStart);
+        long endDate = DatetimeUtil.dateToLong(toDateTxt.getText().toString() + " " + DatetimeUtil.DayEnd);
+
+        try {
+            errorLogList = DataBaseManager.getHelper().getErrorLogDAO().queryBuilder().orderBy("id", false).where().between("date", startDate, endDate).query();
+            errorLogAdapter.setData(errorLogList);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -67,7 +121,15 @@ public class ErrorLogActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         initRecyclerViewList();
+
+        initDate();
     }
+
+    public void initDate() {
+        fromDateTxt.setText(DatetimeUtil.getDurrentDate());
+        toDateTxt.setText(DatetimeUtil.getDurrentDate());
+    }
+
 
     private void initRecyclerViewList() {
 
@@ -92,8 +154,8 @@ public class ErrorLogActivity extends AppCompatActivity {
     private View.OnClickListener singleDeleteListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            int position = (int) v.getTag();
             try {
+                int position = (int) v.getTag();
                 DataBaseManager.getHelper().getErrorLogDAO().deleteById(errorLogList.get(position).getId());
                 errorLogAdapter.singleDelete(position);
             } catch (SQLException e) {

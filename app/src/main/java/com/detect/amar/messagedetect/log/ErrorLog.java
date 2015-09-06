@@ -19,6 +19,7 @@ public class ErrorLog {
     @DatabaseField
     private String title;
 
+    private boolean isChecked;
 
     public ErrorLog() {
     }
@@ -66,6 +67,14 @@ public class ErrorLog {
         this.title = title;
     }
 
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setIsChecked(boolean isChecked) {
+        this.isChecked = isChecked;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("ErrorLog{");
@@ -73,6 +82,7 @@ public class ErrorLog {
         sb.append(", date=").append(date);
         sb.append(", log='").append(log).append('\'');
         sb.append(", title='").append(title).append('\'');
+        sb.append(", isChecked=").append(isChecked);
         sb.append('}');
         return sb.toString();
     }
