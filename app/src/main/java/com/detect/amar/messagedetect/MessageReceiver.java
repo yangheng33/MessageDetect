@@ -7,6 +7,7 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 import com.detect.amar.common.DatetimeUtil;
 import com.detect.amar.common.PhoneUtil;
+import com.detect.amar.messagedetect.version.VersionActivity;
 
 public class MessageReceiver extends BroadcastReceiver {
     String TAG = "home";
@@ -43,6 +44,9 @@ public class MessageReceiver extends BroadcastReceiver {
                 }
             }
         } else if (intent.getAction().equals(AMAR_NOTICE)) {
+//            Intent intent1 = new Intent(context, VersionActivity.class);
+//            intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            context.startActivity(intent1);
         } else if (intent.getAction().equals(SMS_CHANGE)) {
         } else if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
         }

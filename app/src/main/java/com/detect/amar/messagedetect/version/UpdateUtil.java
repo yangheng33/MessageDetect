@@ -1,15 +1,16 @@
 package com.detect.amar.messagedetect.version;
 
-import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
-import com.detect.amar.common.SApplication;
+import android.os.Environment;
+import android.util.Log;
+
+import com.thin.downloadmanager.DownloadRequest;
+import com.thin.downloadmanager.DownloadStatusListener;
+import com.thin.downloadmanager.ThinDownloadManager;
 
 import java.io.File;
 
@@ -18,63 +19,61 @@ import java.io.File;
  */
 public class UpdateUtil extends BroadcastReceiver {
 
-    private static long myDownloadReference;
+    Context context;
+
+    String fileName = "";
+
+    int DOWNLOAD_THREAD_POOL_SIZE = 1;
+    ThinDownloadManager downloadManager;
+    int downloadId;
+
+    DownLoadProgress downLoadProgress;
+
+    public UpdateUtil(Context context, String apkUrl, DownLoadProgress downLoadProgress) {
+        this.context = context;
+        this.downLoadProgress = downLoadProgress;
+        download(apkUrl);
+    }
 
     public void download(String url) {
-        new MyDownloadApkAsyncTask().execute(url);
-    }
-
-    private boolean startDownload(String url) {
-        boolean success = false;
-        try {
-            DownloadManager downloadManager = (DownloadManager) SApplication.getInstance().getSystemService(Context.DOWNLOAD_SERVICE);
-            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-            long reference = downloadManager.enqueue(request);
-
-            myDownloadReference = reference;
-            success = true;
-        } catch (Exception e) {
-            e.printStackTrace();
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/install/";
+        File file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
         }
-        return success;
+        fileName = path + url.substring(url.lastIndexOf("/"));
+        downloadManager = new ThinDownloadManager(DOWNLOAD_THREAD_POOL_SIZE);
+        Uri downloadUri = Uri.parse(url);
+        Uri destinationUri = Uri.parse(fileName);
+        final DownloadRequest downloadRequest1 = new DownloadRequest(downloadUri)
+                .setDestinationURI(destinationUri).setPriority(DownloadRequest.Priority.LOW)
+                .setDownloadListener(downloadStatusListener);
+        downloadId = downloadManager.add(downloadRequest1);
     }
 
-    private void addReceiverListing() {
-        final DownloadManager downloadManager = (DownloadManager) SApplication.getInstance().getSystemService(Context.DOWNLOAD_SERVICE);
+    DownloadStatusListener downloadStatusListener = new DownloadStatusListener() {
+        @Override
+        public void onDownloadComplete(int i) {
+            Intent installIntent = new Intent(Intent.ACTION_VIEW);
+            installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            installIntent.setDataAndType(Uri.fromFile(new File(fileName)), "application/vnd.android.package-archive");
+            context.startActivity(installIntent);
+        }
 
-        IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
+        @Override
+        public void onDownloadFailed(int id, int errorCode, String errorMessage) {
+            Log.d("home", "onDownloadFailed");
+        }
 
-        BroadcastReceiver receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                long reference = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-                if (myDownloadReference == reference) {
-                    DownloadManager.Query myDownloadQuery = new DownloadManager.Query();
-                    myDownloadQuery.setFilterById(reference);
-
-                    Cursor myDownload = downloadManager.query(myDownloadQuery);
-                    if (myDownload.moveToFirst()) {
-                        int fileNameIdx = myDownload.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME);
-                        int fileUriIdx = myDownload.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI);
-
-                        String fileName = myDownload.getString(fileNameIdx);
-                        String fileUri = myDownload.getString(fileUriIdx);
-                        try {
-                            Intent installIntent = new Intent(Intent.ACTION_VIEW);
-                            installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            installIntent.setDataAndType(Uri.fromFile(new File(fileName)), "application/vnd.android.package-archive");
-                            SApplication.getInstance().startActivity(installIntent);
-                            // SApplication.getInstance().getCurrentActivity().startActivity( installIntent );
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    myDownload.close();
-                }
+        @Override
+        public void onProgress(int id, long totalBytes, int progress) {
+            Log.d("home", "onProgress" + id + "," + totalBytes + "," + progress);
+            if (downLoadProgress != null) {
+                downLoadProgress.onProgress(id, totalBytes, progress);
             }
-        };
-        SApplication.getInstance().registerReceiver(receiver, filter);
-    }
+        }
+    };
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -101,24 +100,7 @@ public class UpdateUtil extends BroadcastReceiver {
         }
     }
 
-    public class MyDownloadApkAsyncTask extends AsyncTask<String, Integer, String> {
-        @Override
-        protected String doInBackground(String... params) {
-            addReceiverListing();
-            boolean updateIsSuccess = startDownload(params[0]);
-            if (!updateIsSuccess) {
-                publishProgress(1);
-            }
-            //publishProgress( 1 );
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... progress) {
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-        }
+    public interface DownLoadProgress {
+        void onProgress(int id, long totalBytes, int progress);
     }
 }
