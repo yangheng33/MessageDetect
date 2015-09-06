@@ -42,7 +42,7 @@ public class VersionDialogFragment extends DialogFragment implements android.con
             info.append(version.getVersionDesc());
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle(getResources().getString(R.string.update_immediately))
+            builder.setTitle(getResources().getString(R.string.new_version_available))
                     .setMessage(info.toString())
                     .setPositiveButton(getResources().getString(R.string.agree), this)
                     .setNegativeButton(getResources().getString(R.string.next_time), this)

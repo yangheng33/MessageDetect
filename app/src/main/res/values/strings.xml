@@ -33,7 +33,7 @@
     <string name="current_version">Current Version Name:</string>
     <string name="check_update">Check Update</string>
 
-    <string name="update_immediately">Update Immediately</string>
+    <string name="new_version_available">New Version Available</string>
     <string name="agree">Agree</string>
     <string name="next_time">Next time</string>
 

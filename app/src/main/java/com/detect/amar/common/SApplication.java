@@ -21,7 +21,7 @@ public class SApplication extends Application {
         PreferencesUtils.setApplication(this);
         ResourcesUtil.setApplication(this);
         DataBaseManager.init(this);
-        //Thread.setDefaultUncaughtExceptionHandler(new UncatchException());
+        Thread.setDefaultUncaughtExceptionHandler(new UncatchException());
     }
 
     public static SApplication getInstance() {

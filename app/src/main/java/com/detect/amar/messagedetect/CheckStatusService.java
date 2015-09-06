@@ -69,14 +69,14 @@ public class CheckStatusService extends Service {
             public void onNext(Long aLong) {
                 Log.d(Tag, "in the startCheck:" + cycleFrequency + "==>" + System.currentTimeMillis() / 1000);
 
-                setGetStatus();
+                setStatus();
 
                 startCheck();
             }
         });
     }
 
-    public void setGetStatus() {
+    public void setStatus() {
         Map<String, String> paramMap = new WeakHashMap<>();
         paramMap.put("device_no", PhoneUtil.getDeviceNo(this));
         paramMap.put("battery_percentage", PreferencesUtils.getString(Setting.Current_Battery, "0"));
