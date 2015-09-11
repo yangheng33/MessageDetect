@@ -139,7 +139,7 @@ public class ErrorLogActivity extends AppCompatActivity {
         recyclerView.setAdapter(errorLogAdapter);
 
         try {
-            errorLogList = DataBaseManager.getHelper().getErrorLogDAO().queryBuilder().orderBy("id", false).query();
+            errorLogList = DataBaseManager.getHelper().getErrorLogDAO().queryBuilder().limit(100L).orderBy("id", false).query();
             errorLogAdapter.setData(errorLogList);
         } catch (SQLException e) {
             e.printStackTrace();

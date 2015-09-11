@@ -182,6 +182,24 @@ public class Message implements Parcelable {
     }
 
     @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Message{");
+        sb.append("fromNumber='").append(fromNumber).append('\'');
+        sb.append(", toNumber='").append(toNumber).append('\'');
+        sb.append(", info='").append(info).append('\'');
+        sb.append(", origindate='").append(origindate).append('\'');
+        sb.append(", receiveDate='").append(receiveDate).append('\'');
+        sb.append(", sign='").append(sign).append('\'');
+        sb.append(", id='").append(id).append('\'');
+        sb.append(", lastsenddate='").append(lastsenddate).append('\'');
+        sb.append(", transfail='").append(transfail).append('\'');
+        sb.append(", isTrans=").append(isTrans);
+        sb.append(", deviceSerial='").append(deviceSerial).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -193,6 +211,7 @@ public class Message implements Parcelable {
         dest.writeString(this.info);
         dest.writeString(this.origindate);
         dest.writeString(this.receiveDate);
+        dest.writeInt(this.simSlot);
         dest.writeString(this.sign);
         dest.writeInt(this.id);
         dest.writeString(this.lastsenddate);
@@ -207,6 +226,7 @@ public class Message implements Parcelable {
         this.info = in.readString();
         this.origindate = in.readString();
         this.receiveDate = in.readString();
+        this.simSlot = in.readInt();
         this.sign = in.readString();
         this.id = in.readInt();
         this.lastsenddate = in.readString();
@@ -224,22 +244,4 @@ public class Message implements Parcelable {
             return new Message[size];
         }
     };
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("Message{");
-        sb.append("fromNumber='").append(fromNumber).append('\'');
-        sb.append(", toNumber='").append(toNumber).append('\'');
-        sb.append(", info='").append(info).append('\'');
-        sb.append(", origindate='").append(origindate).append('\'');
-        sb.append(", receiveDate='").append(receiveDate).append('\'');
-        sb.append(", sign='").append(sign).append('\'');
-        sb.append(", id='").append(id).append('\'');
-        sb.append(", lastsenddate='").append(lastsenddate).append('\'');
-        sb.append(", transfail='").append(transfail).append('\'');
-        sb.append(", isTrans=").append(isTrans);
-        sb.append(", deviceSerial='").append(deviceSerial).append('\'');
-        sb.append('}');
-        return sb.toString();
-    }
 }
