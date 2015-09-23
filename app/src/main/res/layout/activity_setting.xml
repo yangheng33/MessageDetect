@@ -36,22 +36,6 @@
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="@string/api_url" />
-
-        <EditText
-            android:id="@+id/setting_api_url"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:gravity="right"
             android:text="@string/frequency" />
 
         <EditText
@@ -61,6 +45,29 @@
             android:inputType="numberDecimal"
             android:text="" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="@string/api_url" />
+
+        <EditText
+            android:id="@+id/setting_api_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"

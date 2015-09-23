@@ -19,9 +19,14 @@ public class Setting {
     public static final String Sim_Status_2_Is_Allow = "Sim_Status_2_Is_Allow";
     public static final String Current_Battery = "Current_Battery";
     public static final String Battery_Status = "Battery_Status";
+    public static final String Battery_Status_Time = "Battery_Status_Time";
+
+    public static final String Is_Initiated = "Is_Initiated";
 
     public static final int Cycle_Frequency_Default = 10;// TODO: 2015/8/30
     public static final String Default_Api_Url = "http://192.168.1.185:81";
+
+
 
     private Context _context;
 

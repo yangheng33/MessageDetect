@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initUI();
-        startBatteryReceiver();
     }
 
     void test() {
@@ -73,9 +72,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    BatteryReceiver batteryReceiver = null;
+
     private void startBatteryReceiver() {
-        IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        registerReceiver(new BatteryReceiver(), intentFilter);
+        if (batteryReceiver == null) {
+            batteryReceiver = new BatteryReceiver();
+            IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+            intentFilter.setPriority(18);
+            registerReceiver(new BatteryReceiver(), intentFilter);
+        }
     }
 
     private void initUI() {
@@ -115,6 +120,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        startBatteryReceiver();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        if (batteryReceiver != null) {
+//            unregisterReceiver(batteryReceiver);
+//            batteryReceiver = null;
+//        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
@@ -143,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.gotoVersion)
     void gotoVersion() {
         Intent intent = new Intent(MainActivity.this, VersionActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 

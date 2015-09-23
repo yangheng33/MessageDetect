@@ -1,5 +1,7 @@
 package com.detect.amar.messagedetect.version;
 
+import com.detect.amar.messagedetect.model.VersionModel;
+
 /**
  * Created by SAM on 2015/9/6.
  */
@@ -28,6 +30,16 @@ public class Version {
         this.isForce = isForce;
         this.currentVersionCode = currentVersionCode;
         this.currentVersionName = currentVersionName;
+    }
+
+    public VersionModel toVersionModel() {
+        VersionModel versionModel = new VersionModel();
+        versionModel.setDescription(versionDesc);
+        versionModel.setDownloadUrl(downloadUrl);
+        versionModel.setIsForce(isForce);
+        versionModel.setVersionName(versionName);
+        versionModel.setVersionCode(versionCode);
+        return versionModel;
     }
 
     public int getCurrentVersionCode() {

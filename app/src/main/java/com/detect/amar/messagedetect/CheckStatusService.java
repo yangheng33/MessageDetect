@@ -3,15 +3,19 @@ package com.detect.amar.messagedetect;
 import android.app.Service;
 import android.content.Intent;
 import android.os.BatteryManager;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.detect.amar.common.DatetimeUtil;
+import com.detect.amar.common.PackageUtil;
 import com.detect.amar.common.PhoneUtil;
 import com.detect.amar.common.PreferencesUtils;
 import com.detect.amar.messagedetect.log.ErrorLogUtil;
 import com.detect.amar.messagedetect.model.CheckResponse;
 import com.detect.amar.messagedetect.model.StdResponse;
 import com.detect.amar.messagedetect.setting.Setting;
+import com.detect.amar.messagedetect.version.VersionActivity;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -55,7 +59,6 @@ public class CheckStatusService extends Service {
         Observable.timer(cycleFrequency, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Subscriber<Long>() {
             @Override
             public void onCompleted() {
-
             }
 
             @Override
@@ -68,9 +71,9 @@ public class CheckStatusService extends Service {
             @Override
             public void onNext(Long aLong) {
                 Log.d(Tag, "in the startCheck:" + cycleFrequency + "==>" + System.currentTimeMillis() / 1000);
-
-                setStatus();
-
+               // if (PreferencesUtils.getBoolean(Setting.Is_Initiated, false)) { //初始化过才进行监听
+                    setStatus();
+                //}
                 startCheck();
             }
         });
@@ -80,6 +83,7 @@ public class CheckStatusService extends Service {
         Map<String, String> paramMap = new WeakHashMap<>();
         paramMap.put("device_no", PhoneUtil.getDeviceNo(this));
         paramMap.put("battery_percentage", PreferencesUtils.getString(Setting.Current_Battery, "0"));
+        paramMap.put("battery_time", PreferencesUtils.getString(Setting.Battery_Status_Time, DatetimeUtil.getDurrentDatetime()));
         paramMap.put("battery_status", PreferencesUtils.getInt(Setting.Battery_Status, BatteryManager.BATTERY_STATUS_UNKNOWN) + "");
 
         String url = PreferencesUtils.getString(Setting.API_BASE_URL, Setting.Default_Api_Url);
@@ -96,17 +100,31 @@ public class CheckStatusService extends Service {
                     PreferencesUtils.putInt(Setting.Cycle_Frequency, stdResponse.getInfo().getCycle_frequency());
                     PreferencesUtils.putBoolean(Setting.Sim_Status_1_Is_Allow, sim_1_status);
                     PreferencesUtils.putBoolean(Setting.Sim_Status_2_Is_Allow, sim_2_status);
+
+                    checkUpdate(stdResponse.getInfo());
                 } catch (Exception e) {
                     e.printStackTrace();
-                    ErrorLogUtil.add("get Status success ,but",e.getMessage());
+                    ErrorLogUtil.add("get Status success ,but", e.getMessage());
                 }
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.d(Tag, "error:" + error.getMessage());
-                ErrorLogUtil.add("get Status failure",error.getMessage());
+                ErrorLogUtil.add("get Status failure", error.getMessage());
             }
         });
+    }
+
+    public void checkUpdate(CheckResponse checkResponse) {
+        Object[] packageInfo = PackageUtil.getAppVersionInfo(CheckStatusService.this);
+        if (Integer.parseInt(packageInfo[1].toString()) < checkResponse.getVersionCode()) {
+            Intent intent = new Intent(CheckStatusService.this, VersionActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(VersionActivity.PARAM, checkResponse.toVersionModel());
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
     }
 }

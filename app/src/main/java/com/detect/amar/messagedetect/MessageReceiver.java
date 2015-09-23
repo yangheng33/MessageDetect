@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.telephony.SmsMessage;
 import android.util.Log;
+
 import com.detect.amar.common.DatetimeUtil;
 import com.detect.amar.common.PhoneUtil;
+import com.detect.amar.messagedetect.main.MainActivity;
 import com.detect.amar.messagedetect.version.VersionActivity;
 
 public class MessageReceiver extends BroadcastReceiver {
@@ -39,16 +41,24 @@ public class MessageReceiver extends BroadcastReceiver {
                     startIntent.putExtra("message", message);
 
                     context.startService(startIntent);
+                    gotoMain(context);
                 } catch (Exception e) {
                     Log.d(TAG, e.getMessage());
                 }
             }
         } else if (intent.getAction().equals(AMAR_NOTICE)) {
-//            Intent intent1 = new Intent(context, VersionActivity.class);
+//            Intent intent1 = new Intent(context, MainActivity.class);
 //            intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //            context.startActivity(intent1);
         } else if (intent.getAction().equals(SMS_CHANGE)) {
         } else if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
         }
     }
+
+    public void gotoMain(Context context) {
+        Intent intent1 = new Intent(context, MainActivity.class);
+        intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent1);
+    }
+
 }

@@ -10,20 +10,11 @@
     android:background="@color/white"
     tools:context="com.detect.amar.messagedetect.main.MainActivity">
 
-    <TextView
-        android:textSize="18sp"
-        android:id="@+id/gotoSystemSetting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/goto_system_setting"
-        android:textStyle="italic" />
-
-
     <RelativeLayout
         android:background="@drawable/part"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+
         android:orientation="horizontal"
         android:padding="5dp">
 
@@ -57,8 +48,17 @@
     </RelativeLayout>
 
     <TextView
-        android:layout_marginTop="10dp"
-        android:textSize="18sp"
+        android:layout_marginTop="15dp"
+        android:textSize="24sp"
+        android:id="@+id/gotoSystemSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/goto_system_setting"
+        android:textStyle="italic" />
+
+    <TextView
+        android:layout_marginTop="15dp"
+        android:textSize="24sp"
         android:id="@+id/gotoErrorLog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,8 +66,8 @@
         android:textStyle="italic" />
 
     <TextView
-        android:layout_marginTop="10dp"
-        android:textSize="18sp"
+        android:layout_marginTop="15dp"
+        android:textSize="24sp"
         android:id="@+id/gotoVersion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

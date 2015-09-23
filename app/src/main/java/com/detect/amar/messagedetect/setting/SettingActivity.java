@@ -99,6 +99,7 @@ public class SettingActivity extends AppCompatActivity {
             @Override
             public void success(StdResponse stdResponse, Response response) {
                 Toast.makeText(SettingActivity.this, ResourcesUtil.getString(R.string.save_success), Toast.LENGTH_SHORT).show();
+                PreferencesUtils.putBoolean(Setting.Is_Initiated, true);
             }
 
             @Override

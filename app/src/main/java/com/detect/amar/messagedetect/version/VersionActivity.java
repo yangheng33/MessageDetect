@@ -1,58 +1,99 @@
 package com.detect.amar.messagedetect.version;
 
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.detect.amar.common.PackageUtil;
+import com.detect.amar.common.PreferencesUtils;
 import com.detect.amar.common.ResourcesUtil;
+import com.detect.amar.messagedetect.HttpService;
 import com.detect.amar.messagedetect.R;
+import com.detect.amar.messagedetect.model.StdResponse;
+import com.detect.amar.messagedetect.model.VersionModel;
+import com.detect.amar.messagedetect.setting.Setting;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class VersionActivity extends AppCompatActivity {
 
+    public static final String PARAM = "VersionActivity_Param";
+
     @Bind(R.id.version_name)
     TextView versionNameTxt;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_version);
         ButterKnife.bind(this);
-
         setCurrentVersionName();
+
+        VersionModel versionModel = getIntent().getParcelableExtra(PARAM);
+        if (versionModel != null) {
+            validateUpdate(versionModel);
+        }
     }
 
     @OnClick(R.id.version_check)
     void checkUpdate() {
-        VersionDialogFragment versionDialogFragment = new VersionDialogFragment();
+        String url = PreferencesUtils.getString(Setting.API_BASE_URL, Setting.Default_Api_Url);
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(url).build();
+        HttpService service = restAdapter.create(HttpService.class);
 
-        final Version version = new Version(2, "1.0.2", "重大升级", "http://192.168.254.102:8080/examples/1.apk", 0, 1, "1.0.0");
+        service.getVersion(new Callback<StdResponse<List<VersionModel>>>() {
+            @Override
+            public void success(StdResponse<List<VersionModel>> versionModelStdResponse, Response response) {
+                if (versionModelStdResponse.getInfo() != null && versionModelStdResponse.getInfo().size() > 0) {
+                    VersionModel versionModel = versionModelStdResponse.getInfo().get(0);
+                    validateUpdate(versionModel);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(VersionActivity.this, ResourcesUtil.getString(R.string.get_version_error), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void validateUpdate(VersionModel versionModel) {
+        Object[] packageInfo = PackageUtil.getAppVersionInfo(VersionActivity.this);
+        if (Integer.parseInt(packageInfo[1].toString()) < versionModel.getVersionCode()) {
+            Version version = new Version(versionModel.getVersionCode(), versionModel.getVersionName(),
+                    versionModel.getDescription(), versionModel.getDownloadUrl(), versionModel.getIsForce(),
+                    Integer.parseInt(packageInfo[1].toString()), packageInfo[0].toString());
+            if (version.getIsForce() == 1) {
+                download(version);
+            } else {
+                showDialog(version);
+            }
+        }
+    }
+
+    public void showDialog(final Version version) {
+        VersionDialogFragment versionDialogFragment = new VersionDialogFragment();
         versionDialogFragment.setClickDialog(new VersionDialogFragment.ClickDialog() {
             @Override
             public void callBack(int status) {
                 Log.d("home", "status:" + status + "");
 
                 if (status == VersionDialogFragment.ClickDialog.SURE) {
-                    showDownload();
-
-                    new UpdateUtil(VersionActivity.this, version.getDownloadUrl(), new UpdateUtil.DownLoadProgress() {
-                        @Override
-                        public void onProgress(int id, long totalBytes, int progress) {
-                            if (downloadDialog != null) {
-                                downloadDialog.setProgress(progress);
-                                downloadDialog.setMessage(ResourcesUtil.getString(R.string.waiting_please) + progress + "%");
-                            }
-                        }
-                    });
+                    download(version);
                 }
             }
         });
@@ -61,6 +102,19 @@ public class VersionActivity extends AppCompatActivity {
         versionDialogFragment.show(getFragmentManager(), "versionDialogFragment");
     }
 
+    void download(final Version version) {
+        showDownload();
+
+        new UpdateUtil(VersionActivity.this, version.getDownloadUrl(), new UpdateUtil.DownLoadProgress() {
+            @Override
+            public void onProgress(int id, long totalBytes, int progress) {
+                if (downloadDialog != null) {
+                    downloadDialog.setProgress(progress);
+                    downloadDialog.setMessage(ResourcesUtil.getString(R.string.waiting_please) + progress + "%");
+                }
+            }
+        });
+    }
 
     void setCurrentVersionName() {
         try {

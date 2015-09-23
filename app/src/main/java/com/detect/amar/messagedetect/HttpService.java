@@ -2,7 +2,9 @@ package com.detect.amar.messagedetect;
 
 import com.detect.amar.messagedetect.model.CheckResponse;
 import com.detect.amar.messagedetect.model.StdResponse;
+import com.detect.amar.messagedetect.model.VersionModel;
 
+import java.util.List;
 import java.util.Map;
 
 import retrofit.Callback;
@@ -24,11 +26,14 @@ public interface HttpService {
     void getHtml(Callback<String> html);
 
     @POST("/receivesms.ashx")
-    void sendMessage(@QueryMap Map<String,String> message, Callback<StdResponse> callback);
+    void sendMessage(@QueryMap Map<String, String> message, Callback<StdResponse> callback);
 
     @POST("/setsimcard.ashx")
-    void sendSetting(@QueryMap Map<String,String> message,Callback<StdResponse> callback);
+    void sendSetting(@QueryMap Map<String, String> message, Callback<StdResponse> callback);
 
     @POST("/checkstatus.ashx")
-    void getSimCardStatus(@QueryMap Map<String,String> message,Callback<StdResponse<CheckResponse>> callback);
+    void getSimCardStatus(@QueryMap Map<String, String> message, Callback<StdResponse<CheckResponse>> callback);
+
+    @GET("/version.ashx")
+    void getVersion(Callback<StdResponse<List<VersionModel>>> callback);
 }
