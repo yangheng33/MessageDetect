@@ -63,9 +63,9 @@ public class VersionActivity extends AppCompatActivity {
                     if (versionModel != null)
                         validateUpdate(versionModel);
                     else
-                        Toast.makeText(VersionActivity.this, ResourcesUtil.getString(R.string.this_is_latest_version), Toast.LENGTH_SHORT).show();
+                        showIsLastVersion();
                 } else {
-                    Toast.makeText(VersionActivity.this, ResourcesUtil.getString(R.string.this_is_latest_version), Toast.LENGTH_SHORT).show();
+                    showIsLastVersion();
                 }
             }
 
@@ -88,6 +88,13 @@ public class VersionActivity extends AppCompatActivity {
                 showDialog(version);
             }
         }
+        else {
+            showIsLastVersion();
+        }
+    }
+
+    public void showIsLastVersion() {
+        Toast.makeText(VersionActivity.this, ResourcesUtil.getString(R.string.this_is_latest_version), Toast.LENGTH_SHORT).show();
     }
 
     public void showDialog(final Version version) {
