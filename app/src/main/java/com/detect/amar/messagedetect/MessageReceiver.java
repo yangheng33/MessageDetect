@@ -52,6 +52,9 @@ public class MessageReceiver extends BroadcastReceiver {
 //            context.startActivity(intent1);
         } else if (intent.getAction().equals(SMS_CHANGE)) {
         } else if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
+            Intent sayHelloIntent=new Intent(context,MainActivity.class);
+            sayHelloIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(sayHelloIntent);
         }
     }
 
