@@ -42,4 +42,5 @@
     <string name="updating">Is updating...</string>
     <string name="waiting_please">Waiting please ,thank you for your cooperation!</string>
     <string name="get_version_error">get version error</string>
+    <string name="this_is_latest_version">This is the latest version.</string>
 </resources>

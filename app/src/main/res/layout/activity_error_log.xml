@@ -16,14 +16,14 @@
 
         <EditText
             android:id="@+id/error_from"
-            android:layout_width="70dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="2014-11-01"
             android:textSize="12sp" />
 
         <EditText
             android:id="@+id/error_to"
-            android:layout_width="70dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/error_from"
             android:text="2014-11-01"

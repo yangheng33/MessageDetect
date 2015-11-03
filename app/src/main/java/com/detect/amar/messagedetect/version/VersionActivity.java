@@ -60,7 +60,12 @@ public class VersionActivity extends AppCompatActivity {
             public void success(StdResponse<List<VersionModel>> versionModelStdResponse, Response response) {
                 if (versionModelStdResponse.getInfo() != null && versionModelStdResponse.getInfo().size() > 0) {
                     VersionModel versionModel = versionModelStdResponse.getInfo().get(0);
-                    validateUpdate(versionModel);
+                    if (versionModel != null)
+                        validateUpdate(versionModel);
+                    else
+                        Toast.makeText(VersionActivity.this, ResourcesUtil.getString(R.string.this_is_latest_version), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(VersionActivity.this, ResourcesUtil.getString(R.string.this_is_latest_version), Toast.LENGTH_SHORT).show();
                 }
             }
 
