@@ -63,14 +63,12 @@ public class CheckStatusService extends Service {
 
             @Override
             public void onError(Throwable e) {
-                Log.d(Tag, "in the startCheck_error" + e.getMessage());
-                ErrorLogUtil.add("cycle", e.getMessage());
+                ErrorLogUtil.add("cycle error", e.getMessage());
                 startCheck();
             }
 
             @Override
             public void onNext(Long aLong) {
-                Log.d(Tag, "in the startCheck:" + cycleFrequency + "==>" + System.currentTimeMillis() / 1000);
                // if (PreferencesUtils.getBoolean(Setting.Is_Initiated, false)) { //初始化过才进行监听
                     setStatus();
                 //}
@@ -93,25 +91,22 @@ public class CheckStatusService extends Service {
         service.getSimCardStatus(paramMap, new Callback<StdResponse<CheckResponse>>() {
             @Override
             public void success(StdResponse<CheckResponse> stdResponse, Response response) {
-                Log.d(Tag, "success:" + stdResponse.toString());
                 try {
-                    boolean sim_1_status = !(stdResponse.getInfo().getStatus_sim_1() == null || "".equals(stdResponse.getInfo().getStatus_sim_1()) || "0".equals(stdResponse.getInfo().getStatus_sim_1()));
-                    boolean sim_2_status = !(stdResponse.getInfo().getStatus_sim_2() == null || "".equals(stdResponse.getInfo().getStatus_sim_2()) || "0".equals(stdResponse.getInfo().getStatus_sim_2()));
+                    //boolean sim_1_status = !(stdResponse.getInfo().getStatus_sim_1() == null || "".equals(stdResponse.getInfo().getStatus_sim_1()) || "0".equals(stdResponse.getInfo().getStatus_sim_1()));
+                    //boolean sim_2_status = !(stdResponse.getInfo().getStatus_sim_2() == null || "".equals(stdResponse.getInfo().getStatus_sim_2()) || "0".equals(stdResponse.getInfo().getStatus_sim_2()));
                     PreferencesUtils.putInt(Setting.Cycle_Frequency, stdResponse.getInfo().getCycle_frequency());
-                    PreferencesUtils.putBoolean(Setting.Sim_Status_1_Is_Allow, sim_1_status);
-                    PreferencesUtils.putBoolean(Setting.Sim_Status_2_Is_Allow, sim_2_status);
+                    //PreferencesUtils.putBoolean(Setting.Sim_Status_1_Is_Allow, sim_1_status);
+                    //PreferencesUtils.putBoolean(Setting.Sim_Status_2_Is_Allow, sim_2_status);
 
                     checkUpdate(stdResponse.getInfo());
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    ErrorLogUtil.add("get Status success ,but", e.getMessage());
+                    ErrorLogUtil.add("error after send status", e.getMessage());
                 }
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d(Tag, "error:" + error.getMessage());
-                ErrorLogUtil.add("get Status failure", error.getMessage());
+                ErrorLogUtil.add("send status error", error.getMessage());
             }
         });
     }

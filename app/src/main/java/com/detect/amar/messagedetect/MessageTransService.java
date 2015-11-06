@@ -9,19 +9,17 @@ import android.util.Log;
 
 import com.detect.amar.common.DatetimeUtil;
 import com.detect.amar.common.PreferencesUtils;
-import com.detect.amar.common.SApplication;
-import com.detect.amar.messagedetect.db.DataBaseManager;
-import com.detect.amar.messagedetect.db.DatabaseHelper;
+import com.detect.amar.messagedetect.log.ErrorLogUtil;
 import com.detect.amar.messagedetect.model.StdResponse;
 import com.detect.amar.messagedetect.setting.Setting;
-import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
 
-import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+import rx.Observable;
+import rx.Subscriber;
 
 public class MessageTransService extends Service {
 
@@ -38,64 +36,78 @@ public class MessageTransService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand() executed");
-        final Message message = intent.getParcelableExtra("message");
-        if (message != null) {
-            String messageTo = message.getSimSlot() + "";
-            boolean allowTrans = true;
-            if (message.getSimSlot() == 1) {
-                messageTo = PreferencesUtils.getString(Setting.SIM_1);
-                allowTrans = PreferencesUtils.getBoolean(Setting.Sim_Status_1_Is_Allow, true);
-            } else if (message.getSimSlot() == 2) {
-                messageTo = PreferencesUtils.getString(Setting.SIM_2);
-                allowTrans = PreferencesUtils.getBoolean(Setting.Sim_Status_2_Is_Allow, true);
+        try {
+            Message message = intent.getParcelableExtra("message");
+            if (message != null) {
+                sendMessage(message);
             }
-            if (allowTrans) {
-                message.setToNumber(messageTo);
+        }catch (Exception e)
+        {
+            ErrorLogUtil.add("error in onStartCommand", e.getMessage());
+        }
+        return super.onStartCommand(intent, flags, startId);
+    }
 
-                try {
-                    DataBaseManager.getHelper().getMessageDAO().create(message);
-                    Log.d(TAG, message.toString());
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+    private void sendMessage(final Message message) {
+        String messageTo = message.getSimSlot() + "";
+        boolean allowTrans = true;
+        if (message.getSimSlot() == 1) {
+            messageTo = PreferencesUtils.getString(Setting.SIM_1, "1");
+            //allowTrans = PreferencesUtils.getBoolean(Setting.Sim_Status_1_Is_Allow, true);
+        } else if (message.getSimSlot() == 2) {
+            messageTo = PreferencesUtils.getString(Setting.SIM_2, "2");
+            //allowTrans = PreferencesUtils.getBoolean(Setting.Sim_Status_2_Is_Allow, true);
+        }
+        message.setToNumber(messageTo);
 
+        String url = PreferencesUtils.getString(Setting.API_BASE_URL, Setting.Default_Api_Url);
+        RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(url).build();
+        HttpService service = restAdapter.create(HttpService.class);
+        service.sendMessage(message.toMap(), new Callback<StdResponse>() {
+            @Override
+            public void success(StdResponse stdResponse, retrofit.client.Response response2) {
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                ErrorLogUtil.add("send msg error will resend", message.getInfo() + "===>" + error.getMessage());
+                resendMessage(message);
+            }
+        });
+    }
+    private void resendMessage(final Message message) {
+
+        Observable.timer(10, TimeUnit.SECONDS).subscribe(new Subscriber<Long>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                ErrorLogUtil.add("error before resend", message.getInfo() + "===>" + e.getMessage());
+            }
+
+            @Override
+            public void onNext(Long aLong) {
                 String url = PreferencesUtils.getString(Setting.API_BASE_URL, Setting.Default_Api_Url);
                 RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(url).build();
                 HttpService service = restAdapter.create(HttpService.class);
                 service.sendMessage(message.toMap(), new Callback<StdResponse>() {
                     @Override
                     public void success(StdResponse stdResponse, retrofit.client.Response response2) {
-                        Log.d(TAG, "发送成功:" + message.toString());
-                        try {
-                            message.setIsTrans(true);
-                            message.setLastsenddate(DatetimeUtil.getDurrentDatetime());
-                            DataBaseManager.getHelper().getMessageDAO().update(message);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Log.d(TAG, "发送失败:" + message.toString() + "\n:原因,\n" + error.getMessage());
-                        try {
-                            message.setIsTrans(false);
-                            message.setLastsenddate(DatetimeUtil.getDurrentDatetime());
-                            //message.setTransfail(error.getMessage().length() > 200 ? error.getMessage().substring(0, 200) : error.getMessage());
-                            message.setTransfail(error.getMessage());
-                            DataBaseManager.getHelper().getMessageDAO().update(message);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
+                        ErrorLogUtil.add("resend msg error", message.getInfo() + "===>" + error.getMessage());
                     }
                 });
             }
-        }
-        return super.onStartCommand(intent, flags, startId);
-    }
+        });
 
-    //private DatabaseHelper databaseHelper;
+
+    }
 
     @Override
     public void onDestroy() {
