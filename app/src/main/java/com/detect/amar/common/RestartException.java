@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.detect.amar.messagedetect.log.ErrorLogUtil;
 import com.detect.amar.messagedetect.main.MainActivity;
 
 /**
@@ -27,6 +28,9 @@ public class RestartException implements Thread.UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
+
+        String error = (ex != null && ex.getMessage() != null) ? ex.getMessage() : "i don't know error cause.";
+        ErrorLogUtil.add("fatal error", "error:" + error);
         if (!handleException(ex) && mDefaultHandler != null) {
             //如果用户没有处理则让系统默认的异常处理器来处理
             mDefaultHandler.uncaughtException(thread, ex);
