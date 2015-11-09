@@ -47,7 +47,9 @@ public class MessageReceiver extends BroadcastReceiver {
                 }
             }
         } else if (intent.getAction().equals(AMAR_NOTICE)) {
-            gotoMain(context);
+            Intent startIntent = new Intent(context, AmarTestService.class);
+            context.startService(startIntent);
+            //gotoMain(context);
         } else if (intent.getAction().equals(SMS_CHANGE)) {
         } else if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
             gotoMain(context);

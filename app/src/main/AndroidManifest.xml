@@ -62,7 +62,10 @@
             android:name=".MessageTransService"
             android:enabled="true"
             android:exported="true" />
-
+        <service
+            android:name=".AmarTestService"
+            android:enabled="true"
+            android:exported="true" />
         <receiver
             android:name=".MessageReceiver"
             android:enabled="true"
