@@ -1,6 +1,8 @@
 package com.detect.amar.messagedetect;
 
+import android.app.ActivityManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.BatteryManager;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import com.detect.amar.common.DatetimeUtil;
 import com.detect.amar.common.PackageUtil;
 import com.detect.amar.common.PhoneUtil;
 import com.detect.amar.common.PreferencesUtils;
+import com.detect.amar.common.ServiceUtils;
 import com.detect.amar.messagedetect.log.ErrorLogUtil;
 import com.detect.amar.messagedetect.model.CheckResponse;
 import com.detect.amar.messagedetect.model.StdResponse;
@@ -47,15 +50,12 @@ public class CheckStatusService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        if (!isRunning) {
-            isRunning = true;
-            startCheck();
-        }
+        startCheck();
         return super.onStartCommand(intent, flags, startId);
     }
 
     void startCheck() {
-        final int cycleFrequency = PreferencesUtils.getInt(Setting.Cycle_Frequency, Setting.Cycle_Frequency_Default);
+        final int cycleFrequency = 30;//PreferencesUtils.getInt(Setting.Cycle_Frequency, Setting.Cycle_Frequency_Default);
         Observable.timer(cycleFrequency, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Subscriber<Long>() {
             @Override
             public void onCompleted() {
@@ -73,6 +73,10 @@ public class CheckStatusService extends Service {
                     setStatus();
                 //}
                 startCheck();
+
+                if (!ServiceUtils.isServiceRunning( CheckSelfervice.class.getName(),CheckStatusService.this)) {
+                    startStatusService(CheckStatusService.this);
+                }
             }
         });
     }
@@ -121,5 +125,10 @@ public class CheckStatusService extends Service {
             intent.putExtras(bundle);
             startActivity(intent);
         }
+    }
+
+    public void startStatusService(Context context) {
+        Intent intent = new Intent(context,CheckSelfervice.class);
+        context.startService(intent);
     }
 }

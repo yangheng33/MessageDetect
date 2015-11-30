@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.detect.amar.common.ResourcesUtil;
 import com.detect.amar.common.ServiceUtils;
 import com.detect.amar.messagedetect.BatteryReceiver;
+import com.detect.amar.messagedetect.CheckSelfervice;
 import com.detect.amar.messagedetect.CheckStatusService;
 import com.detect.amar.messagedetect.R;
 import com.detect.amar.messagedetect.db.DataBaseManager;
@@ -75,20 +76,21 @@ public class MainActivity extends AppCompatActivity {
     BatteryReceiver batteryReceiver = null;
 
     private void startBatteryReceiver() {
-        if (batteryReceiver == null) {
+        //if (batteryReceiver == null) {
             batteryReceiver = new BatteryReceiver();
             IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-            intentFilter.setPriority(18);
+            //intentFilter.setPriority(18);
             registerReceiver(new BatteryReceiver(), intentFilter);
-        }
+        //}
     }
 
     private void initUI() {
         Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(Subscriber<? super Boolean> subscriber) {
-                boolean result = ServiceUtils.isServiceRunning(CheckStatusService.class.getName(), MainActivity.this);
-                subscriber.onNext(result);
+                boolean statusResult = ServiceUtils.isServiceRunning(CheckStatusService.class.getName(), MainActivity.this);
+                boolean checkSelfResult = ServiceUtils.isServiceRunning(CheckSelfervice.class.getName(), MainActivity.this);
+                subscriber.onNext(statusResult&&checkSelfResult);
             }
         }).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Subscriber<Boolean>() {
             @Override
@@ -144,6 +146,9 @@ public class MainActivity extends AppCompatActivity {
     void serviceStart() {
         Intent startIntent = new Intent(this, CheckStatusService.class);
         startService(startIntent);
+
+        Intent checkSelfIntent = new Intent(this, CheckSelfervice.class);
+        startService(checkSelfIntent);
         systemStatusTxt.setText(ResourcesUtil.getString(R.string.service_is_starting));
         initUI();
     }

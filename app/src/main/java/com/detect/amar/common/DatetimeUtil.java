@@ -70,7 +70,7 @@ public class DatetimeUtil {
     public static long dateToLong(String datetime) {
         long longDate = 0L;
         try {
-            longDate = getSimpleDateFormat().parse(datetime).getTime();
+            longDate = getSimpleDatetimeFormat().parse(datetime).getTime();
         } catch (ParseException e) {
             e.printStackTrace();
         }

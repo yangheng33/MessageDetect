@@ -15,6 +15,7 @@
         android:padding="5dp">
 
         <EditText
+            android:layout_below="@+id/error_query"
             android:id="@+id/error_from"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
@@ -22,6 +23,7 @@
             android:textSize="12sp" />
 
         <EditText
+            android:layout_alignBaseline="@+id/error_from"
             android:id="@+id/error_to"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
@@ -30,12 +32,12 @@
             android:textSize="12sp" />
 
         <TextView
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:layout_marginLeft="5dp"
             android:id="@+id/error_query"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/error_from"
-            android:layout_toRightOf="@+id/error_to"
             android:text="@string/query" />
 
         <TextView
@@ -43,10 +45,10 @@
             android:id="@+id/error_select_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/error_from"
+            android:layout_alignBaseline="@+id/error_query"
+            android:layout_toRightOf="@+id/error_query"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@+id/error_multi_delete"
             android:text="@string/all" />
 
         <TextView
@@ -54,18 +56,18 @@
             android:id="@+id/error_multi_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/error_from"
+            android:layout_alignBaseline="@+id/error_query"
+            android:layout_toRightOf="@+id/error_select_all"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@+id/error_edit"
             android:text="@string/delete" />
 
         <TextView
             android:id="@+id/error_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/error_from"
-            android:layout_alignParentRight="true"
+            android:layout_alignBaseline="@+id/error_query"
+            android:layout_toRightOf="@+id/error_multi_delete"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:text="@string/edit" />

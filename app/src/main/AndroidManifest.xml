@@ -10,14 +10,14 @@
     <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:name="com.detect.amar.common.SApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
         <activity
             android:name=".HomeActivity"
             android:label="@string/app_name"
@@ -31,9 +31,9 @@
             android:label="@string/title_activity_setting"
             android:screenOrientation="portrait" />
         <activity
-            android:launchMode="singleTask"
             android:name=".main.MainActivity"
             android:label="@string/app_name"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -66,6 +66,7 @@
             android:name=".AmarTestService"
             android:enabled="true"
             android:exported="true" />
+
         <receiver
             android:name=".MessageReceiver"
             android:enabled="true"
@@ -79,13 +80,19 @@
         </receiver>
         <receiver
             android:name=".BatteryStageReceiver"
-            android:priority="19">
+            android:priority="19" >
             <intent-filter>
                 <action android:name="amar.android.notice" />
-                <action android:name="android.intent.action.BATTERY_LOW"/>
-                <action android:name="android.intent.action.BATTERY_OKAY"/>
+                <action android:name="android.intent.action.BATTERY_LOW" />
+                <action android:name="android.intent.action.BATTERY_OKAY" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".CheckSelfervice"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>

@@ -8,8 +8,8 @@ android {
         applicationId "com.detect.amar.messagedetect"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 4
-        versionName "1.2.1"
+        versionCode 7
+        versionName "1.2.4"
     }
     buildTypes {
         release {
