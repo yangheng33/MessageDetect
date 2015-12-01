@@ -48,16 +48,9 @@ public class CheckSelfervice extends Service {
 
             @Override
             public void onNext(Long aLong) {
-                if (!ServiceUtils.isServiceRunning( CheckStatusService.class.getName(),CheckSelfervice.this)) {
-                    startStatusService(CheckSelfervice.this);
-                }
+                DoubleCheck.checkService(CheckSelfervice.this);
                 startCheck();
             }
         });
-    }
-
-    public void startStatusService(Context context) {
-        Intent intent = new Intent(context,CheckStatusService.class);
-        context.startService(intent);
     }
 }

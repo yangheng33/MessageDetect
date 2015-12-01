@@ -36,4 +36,7 @@ public interface HttpService {
 
     @GET("/version.ashx")
     void getVersion(Callback<StdResponse<List<VersionModel>>> callback);
+
+    @POST("/receivecall.ashx")
+    void sendCallInfo(@QueryMap Map<String, String> message, Callback<StdResponse> callback);
 }

@@ -45,8 +45,6 @@ public class CheckStatusService extends Service {
         return null;
     }
 
-    boolean isRunning = false;
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
@@ -74,9 +72,7 @@ public class CheckStatusService extends Service {
                 //}
                 startCheck();
 
-                if (!ServiceUtils.isServiceRunning( CheckSelfervice.class.getName(),CheckStatusService.this)) {
-                    startStatusService(CheckStatusService.this);
-                }
+                DoubleCheck.checkService(CheckStatusService.this);
             }
         });
     }
@@ -125,10 +121,5 @@ public class CheckStatusService extends Service {
             intent.putExtras(bundle);
             startActivity(intent);
         }
-    }
-
-    public void startStatusService(Context context) {
-        Intent intent = new Intent(context,CheckSelfervice.class);
-        context.startService(intent);
     }
 }

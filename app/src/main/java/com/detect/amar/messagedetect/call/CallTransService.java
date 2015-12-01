@@ -1,14 +1,12 @@
-package com.detect.amar.messagedetect;
+package com.detect.amar.messagedetect.call;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.IBinder;
-import android.util.Log;
 
-import com.detect.amar.common.DatetimeUtil;
 import com.detect.amar.common.PreferencesUtils;
+import com.detect.amar.messagedetect.DoubleCheck;
+import com.detect.amar.messagedetect.HttpService;
 import com.detect.amar.messagedetect.log.ErrorLogUtil;
 import com.detect.amar.messagedetect.model.StdResponse;
 import com.detect.amar.messagedetect.setting.Setting;
@@ -21,59 +19,55 @@ import retrofit.RetrofitError;
 import rx.Observable;
 import rx.Subscriber;
 
-public class MessageTransService extends Service {
-
-    String TAG = "home";
-
-    public MessageTransService() {
+public class CallTransService extends Service {
+    public CallTransService() {
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.d(TAG, "onBind() executed");
         return null;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-            Message message = intent.getParcelableExtra("message");
-            if (message != null) {
-                sendMessage(message);
+            CallInfo callInfo = intent.getParcelableExtra("callInfo");
+            if (callInfo != null) {
+                sendCallInfo(callInfo);
             }
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             ErrorLogUtil.add("error in onStartCommand", e.getMessage());
         }
         DoubleCheck.checkService(this);
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void sendMessage(final Message message) {
-        String messageTo = message.getSimSlot() + "";
-        if (message.getSimSlot() == 1) {
-            messageTo = PreferencesUtils.getString(Setting.SIM_1, "1");
-        } else if (message.getSimSlot() == 2) {
-            messageTo = PreferencesUtils.getString(Setting.SIM_2, "2");
+    private void sendCallInfo(final CallInfo callInfo) {
+        String toNumber = "" + callInfo.getSlot();
+        if (callInfo.getSlot() == 1) {
+            toNumber = PreferencesUtils.getString(Setting.SIM_1, "1");
+        } else if (callInfo.getSlot() == 2) {
+            toNumber = PreferencesUtils.getString(Setting.SIM_2, "2");
         }
-        message.setToNumber(messageTo);
+        callInfo.setToNumber(toNumber);
 
         String url = PreferencesUtils.getString(Setting.API_BASE_URL, Setting.Default_Api_Url);
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(url).build();
         HttpService service = restAdapter.create(HttpService.class);
-        service.sendMessage(message.toMap(), new Callback<StdResponse>() {
+        service.sendCallInfo(callInfo.toMap(), new Callback<StdResponse>() {
             @Override
             public void success(StdResponse stdResponse, retrofit.client.Response response2) {
             }
 
             @Override
             public void failure(RetrofitError error) {
-                ErrorLogUtil.add("send msg error will resend", message.getInfo() + "===>" + error.getMessage());
-                resendMessage(message);
+                ErrorLogUtil.add("send call error will resend", callInfo.toString() + "===>" + error.getMessage());
+                resendCallInfo(callInfo);
             }
         });
     }
-    private void resendMessage(final Message message) {
+
+    private void resendCallInfo(final CallInfo callInfo) {
 
         Observable.timer(10, TimeUnit.SECONDS).subscribe(new Subscriber<Long>() {
             @Override
@@ -83,7 +77,7 @@ public class MessageTransService extends Service {
 
             @Override
             public void onError(Throwable e) {
-                ErrorLogUtil.add("error before resend", message.getInfo() + "===>" + e.getMessage());
+                ErrorLogUtil.add("error before resend call", callInfo.toString() + "===>" + e.getMessage());
             }
 
             @Override
@@ -91,14 +85,14 @@ public class MessageTransService extends Service {
                 String url = PreferencesUtils.getString(Setting.API_BASE_URL, Setting.Default_Api_Url);
                 RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(url).build();
                 HttpService service = restAdapter.create(HttpService.class);
-                service.sendMessage(message.toMap(), new Callback<StdResponse>() {
+                service.sendCallInfo(callInfo.toMap(), new Callback<StdResponse>() {
                     @Override
                     public void success(StdResponse stdResponse, retrofit.client.Response response2) {
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        ErrorLogUtil.add("resend msg error", message.getInfo() + "===>" + error.getMessage());
+                        ErrorLogUtil.add("resend call error", callInfo.toString() + "===>" + error.getMessage());
                     }
                 });
             }

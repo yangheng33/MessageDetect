@@ -45,7 +45,7 @@ public class Setting {
     }
 
     public String getApiUrl() {
-        return PreferencesUtils.getString(API_BASE_URL, Default_Api_Url);
+        return Default_Api_Url;//PreferencesUtils.getString(API_BASE_URL, Default_Api_Url);
     }
 
     public void setApiUrl(String apiUrl) {
