@@ -53,7 +53,7 @@ public class CheckStatusService extends Service {
     }
 
     void startCheck() {
-        final int cycleFrequency = 30;//PreferencesUtils.getInt(Setting.Cycle_Frequency, Setting.Cycle_Frequency_Default);
+        final int cycleFrequency = Setting.Cycle_Frequency_Default;//PreferencesUtils.getInt(Setting.Cycle_Frequency, Setting.Cycle_Frequency_Default);
         Observable.timer(cycleFrequency, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Subscriber<Long>() {
             @Override
             public void onCompleted() {
@@ -94,11 +94,11 @@ public class CheckStatusService extends Service {
                 try {
                     //boolean sim_1_status = !(stdResponse.getInfo().getStatus_sim_1() == null || "".equals(stdResponse.getInfo().getStatus_sim_1()) || "0".equals(stdResponse.getInfo().getStatus_sim_1()));
                     //boolean sim_2_status = !(stdResponse.getInfo().getStatus_sim_2() == null || "".equals(stdResponse.getInfo().getStatus_sim_2()) || "0".equals(stdResponse.getInfo().getStatus_sim_2()));
-                    PreferencesUtils.putInt(Setting.Cycle_Frequency, stdResponse.getInfo().getCycle_frequency());
+                   // PreferencesUtils.putInt(Setting.Cycle_Frequency, stdResponse.getInfo().getCycle_frequency());
                     //PreferencesUtils.putBoolean(Setting.Sim_Status_1_Is_Allow, sim_1_status);
                     //PreferencesUtils.putBoolean(Setting.Sim_Status_2_Is_Allow, sim_2_status);
 
-                    checkUpdate(stdResponse.getInfo());
+                    //checkUpdate(stdResponse.getInfo());
                 } catch (Exception e) {
                     ErrorLogUtil.add("error after send status", e.getMessage());
                 }

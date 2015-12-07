@@ -34,7 +34,7 @@ public class CheckSelfervice extends Service {
     }
 
     void startCheck() {
-        final int cycleFrequency = 60;//PreferencesUtils.getInt(Setting.Cycle_Frequency, Setting.Cycle_Frequency_Default);
+        final int cycleFrequency = Setting.Cycle_Frequency_Default;//PreferencesUtils.getInt(Setting.Cycle_Frequency, Setting.Cycle_Frequency_Default);
         Observable.timer(cycleFrequency, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Subscriber<Long>() {
             @Override
             public void onCompleted() {

@@ -23,7 +23,7 @@ public class Setting {
 
     public static final String Is_Initiated = "Is_Initiated";
 
-    public static final int Cycle_Frequency_Default = 30;//
+    public static final int Cycle_Frequency_Default = 300;//
     //public static final String Default_Api_Url = "http://192.168.1.185:81";
     public static final String Default_Api_Url = "http://smsapi.lp-sms.com/";
 
