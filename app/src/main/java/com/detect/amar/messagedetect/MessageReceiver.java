@@ -34,7 +34,10 @@ public class MessageReceiver extends BroadcastReceiver {
                     String smsDate = DatetimeUtil.longToDatetime(smsMessage.getTimestampMillis());
                     String receiveDate = DatetimeUtil.longToDatetime(System.currentTimeMillis());
 
-                    int slot = intent.getIntExtra("simSlot", -2) + 1;//局限三星 gt s5282手机 卡槽1的序号是0，卡槽2的序号是1,负数表示无效值
+                    int slot = intent.getIntExtra("simSlot", -10)+1;//局限三星 gt s5282手机 卡槽1的序号是0，卡槽2的序号是1,负数表示无效值
+                    if( slot < 0 )
+                        slot = intent.getIntExtra("simId",-10) + 1;//局限华为
+
                     Log.d(TAG, smsMessage.toString() + ",slot:" + slot);
                     Message message = new Message(sender, slot, content, smsDate, receiveDate, PhoneUtil.getDeviceNo(context));
                     Intent startIntent = new Intent(context, MessageTransService.class);
